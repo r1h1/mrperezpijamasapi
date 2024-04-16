@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\MrPerezApiCore.props" />
+</Project>
