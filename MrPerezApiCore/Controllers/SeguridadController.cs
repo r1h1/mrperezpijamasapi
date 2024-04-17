@@ -58,7 +58,7 @@ namespace MrPerezApiCore.Controllers
                         var tokenDescriptor = new SecurityTokenDescriptor
                         {
                             Subject = claims,
-                            Expires = DateTime.UtcNow.AddDays(1),
+                            Expires = DateTime.UtcNow.AddHours(12),
                             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(keyBytes), SecurityAlgorithms.HmacSha256Signature),
                         };
 
@@ -71,10 +71,14 @@ namespace MrPerezApiCore.Controllers
                             code = 201, 
                             message = "Created", 
                             objeto.AutenticacionId,
+                            objeto.UsuarioId,
+                            objeto.EmpleadoId,
                             objeto.Usuario,
                             objeto.Clave,
+                            objeto.RolEmpleado,
+                            objeto.RolUsuario,
                             objeto.Estado,
-                            token = tokenCreado 
+                            validCreatedToken = tokenCreado 
                         });
                     }
                     else

@@ -21,7 +21,7 @@ namespace MrPerezApiCore.Data
             using (var con = new SqlConnection(conexion))
             {
                 await con.OpenAsync();
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Metodos_Pago", con);
+                SqlCommand cmd = new SqlCommand("SELECT * FROM Metodos_Pago WHERE Estado = 1", con);
                 cmd.CommandType = CommandType.Text;
 
                 using (var reader = await cmd.ExecuteReaderAsync())
@@ -47,7 +47,7 @@ namespace MrPerezApiCore.Data
             using (var con = new SqlConnection(conexion))
             {
                 await con.OpenAsync();
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Metodos_Pago WHERE MetodoPagoId = @PMetodoPagoId", con);
+                SqlCommand cmd = new SqlCommand("SELECT * FROM Metodos_Pago WHERE MetodoPagoId = @PMetodoPagoId AND Estado = 1", con);
                 cmd.Parameters.AddWithValue("@PMetodoPagoId", Id);
                 cmd.CommandType = CommandType.Text;
 

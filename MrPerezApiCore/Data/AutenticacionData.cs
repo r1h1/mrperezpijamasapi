@@ -23,7 +23,12 @@ namespace MrPerezApiCore.Data
             using (var con = new SqlConnection(conexion))
             {
                 await con.OpenAsync();
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Autenticacion", con);
+                SqlCommand cmd = new SqlCommand("SELECT a.AutenticacionId,a.UsuarioId,a.EmpleadoId,a.Usuario,a.Clave,a.Token," +
+                    "a.Estado,b.RolId AS RolUsuario,c.RolId AS RolEmpleado " +
+                    "FROM Autenticacion a " +
+                    "LEFT JOIN Usuario b ON b.UsuarioId = a.UsuarioId " +
+                    "LEFT JOIN Empleado c ON c.EmpleadoId = a.EmpleadoId " +
+                    "WHERE a.Estado = 1", con);
                 cmd.CommandType = CommandType.Text;
 
                 using (var reader = await cmd.ExecuteReaderAsync())
@@ -33,8 +38,12 @@ namespace MrPerezApiCore.Data
                         lista.Add(new Autenticacion
                         {
                             AutenticacionId = Convert.ToInt32(reader["AutenticacionId"]),
+                            UsuarioId = Convert.ToInt32(reader["UsuarioId"]),
+                            EmpleadoId = Convert.ToInt32(reader["EmpresaId"]),
                             Usuario = reader["Usuario"].ToString(),
                             Clave = reader["Clave"].ToString(),
+                            RolEmpleado = Convert.ToInt32(reader["RolUsuario"]),
+                            RolUsuario = Convert.ToInt32(reader["RolEmpleado"]),
                             Estado = Convert.ToInt32(reader["Estado"])
                         });
                     }
@@ -50,7 +59,13 @@ namespace MrPerezApiCore.Data
             using (var con = new SqlConnection(conexion))
             {
                 await con.OpenAsync();
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Autenticacion WHERE AutenticacionId = @PAutenticacionId", con);
+                SqlCommand cmd = new SqlCommand("SELECT a.AutenticacionId,a.UsuarioId,a.EmpleadoId,a.Usuario,a.Clave,a.Token," +
+                    "a.Estado,b.RolId AS RolUsuario,c.RolId AS RolEmpleado " +
+                    "FROM Autenticacion a " +
+                    "LEFT JOIN Usuario b ON b.UsuarioId = a.UsuarioId " +
+                    "LEFT JOIN Empleado c ON c.EmpleadoId = a.EmpleadoId " +
+                    "WHERE a.Estado = 1 " +
+                    "AND a.AutenticacionId = @PAutenticacionId", con);
                 cmd.Parameters.AddWithValue("@PAutenticacionId", Id);
                 cmd.CommandType = CommandType.Text;
 
@@ -61,8 +76,12 @@ namespace MrPerezApiCore.Data
                         objeto = new Autenticacion
                         {
                             AutenticacionId = Convert.ToInt32(reader["AutenticacionId"]),
+                            UsuarioId = Convert.ToInt32(reader["UsuarioId"]),
+                            EmpleadoId = Convert.ToInt32(reader["EmpresaId"]),
                             Usuario = reader["Usuario"].ToString(),
                             Clave = reader["Clave"].ToString(),
+                            RolEmpleado = Convert.ToInt32(reader["RolUsuario"]),
+                            RolUsuario = Convert.ToInt32(reader["RolEmpleado"]),
                             Estado = Convert.ToInt32(reader["Estado"])
                         };
                     }
@@ -87,7 +106,12 @@ namespace MrPerezApiCore.Data
 
             using (var con = new SqlConnection(conexion))
             {
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Autenticacion WHERE Usuario = @PUsuario AND Clave = @PClave AND Estado = 1", con);
+                SqlCommand cmd = new SqlCommand("SELECT a.AutenticacionId,a.UsuarioId,a.EmpleadoId,a.Usuario,a.Clave,a.Token," +
+                                                "a.Estado,b.RolId AS RolUsuario,c.RolId AS RolEmpleado " +
+                                                "FROM Autenticacion a " +
+                                                "LEFT JOIN Usuario b ON b.UsuarioId = a.UsuarioId " +
+                                                "LEFT JOIN Empleado c ON c.EmpleadoId = a.EmpleadoId " +
+                                                "WHERE a.Usuario = @PUsuario AND a.Clave = @PClave AND a.Estado = 1", con);
                 cmd.Parameters.AddWithValue("@PUsuario", Usuario);
                 cmd.Parameters.AddWithValue("@PClave", claveEncriptada);
                 cmd.CommandType = CommandType.Text;
@@ -104,8 +128,12 @@ namespace MrPerezApiCore.Data
                                 objeto = new Autenticacion
                                 {
                                     AutenticacionId = Convert.ToInt32(reader["AutenticacionId"]),
+                                    UsuarioId = Convert.ToInt32(reader["UsuarioId"]),
+                                    EmpleadoId = Convert.ToInt32(reader["EmpleadoId"]),
                                     Usuario = reader["Usuario"].ToString(),
                                     Clave = reader["Clave"].ToString(),
+                                    RolEmpleado = Convert.ToInt32(reader["RolUsuario"]),
+                                    RolUsuario = Convert.ToInt32(reader["RolEmpleado"]),
                                     Estado = Convert.ToInt32(reader["Estado"])
                                 };
                             }
@@ -121,7 +149,7 @@ namespace MrPerezApiCore.Data
         }
 
 
-        public async Task<bool> Crear(Autenticacion objeto)
+        public async Task<bool> Crear(AutenticacionInsertadoEditado objeto)
         {
             bool respuesta = true;
 
@@ -137,9 +165,13 @@ namespace MrPerezApiCore.Data
 
             using (var con = new SqlConnection(conexion))
             {
-                SqlCommand cmd = new SqlCommand("INSERT INTO Autenticacion(Usuario, Clave, Estado) VALUES(@PUsuario, @PClave, @PEstado)", con);
+                SqlCommand cmd = new SqlCommand("INSERT INTO Autenticacion(UsuarioId, EmpleadoId, Usuario, Clave, Token, Estado) " +
+                    "VALUES(@PUsuarioId, @PEmpleadoId, @PUsuario, @PClave, @PToken, @PEstado)", con);
+                cmd.Parameters.AddWithValue("@PUsuarioId", objeto.UsuarioId);
+                cmd.Parameters.AddWithValue("@PEmpleadoId", objeto.EmpleadoId);
                 cmd.Parameters.AddWithValue("@PUsuario", objeto.Usuario);
                 cmd.Parameters.AddWithValue("@PClave", claveEncriptada);
+                cmd.Parameters.AddWithValue("@PToken", objeto.Token);
                 cmd.Parameters.AddWithValue("@PEstado", objeto.Estado);
                 cmd.CommandType = CommandType.Text;
                 try
@@ -155,16 +187,21 @@ namespace MrPerezApiCore.Data
             return respuesta;
         }
 
-        public async Task<bool> Editar(Autenticacion objeto)
+        public async Task<bool> Editar(AutenticacionInsertadoEditado objeto)
         {
             bool respuesta = true;
 
             using (var con = new SqlConnection(conexion))
             {
 
-                SqlCommand cmd = new SqlCommand("UPDATE Autenticacion SET Usuario = @PUsuario, Clave = @PClave, Estado = @PEstado WHERE AutenticacionId = @PAutenticacionId", con);
+                SqlCommand cmd = new SqlCommand("UPDATE Autenticacion SET UsuarioId = @PUsuarioId, EmpleadoId = @PEmpleadoId, " +
+                    "Usuario = @PUsuario, Clave = @PClave, Token = @PToken, Estado = @PEstado " +
+                    "WHERE AutenticacionId = @PAutenticacionId", con);
+                cmd.Parameters.AddWithValue("@PUsuarioId", objeto.UsuarioId);
+                cmd.Parameters.AddWithValue("@PEmpleadoId", objeto.EmpleadoId);
                 cmd.Parameters.AddWithValue("@PUsuario", objeto.Usuario);
                 cmd.Parameters.AddWithValue("@PClave", objeto.Estado);
+                cmd.Parameters.AddWithValue("@PToken", objeto.Token);
                 cmd.Parameters.AddWithValue("@PEstado", objeto.Estado);
                 cmd.Parameters.AddWithValue("@PAutenticacionId", objeto.AutenticacionId);
                 cmd.CommandType = CommandType.Text;

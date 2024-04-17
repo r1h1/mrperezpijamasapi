@@ -23,7 +23,14 @@ namespace MrPerezApiCore.Data
             using (var con = new SqlConnection(conexion))
             {
                 await con.OpenAsync();
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Productos", con);
+                SqlCommand cmd = new SqlCommand("SELECT a.ProductoId, a.Nombre, a.Descripcion, a.Cantidad, a.Precio, a.MarcaId, " +
+                    "a.CategoriaId, a.GeneroId, a.Estado, b.Nombre AS MarcaNombre, b.Proveedor AS ProveedorMarca, " +
+                    "c.Descripcion AS DescripcionCategoria, c.Nombre AS NombreCategoria, d.Nombre AS GeneroNombre, d.Resumen AS GeneroResumen " +
+                    "FROM Productos a " +
+                    "LEFT JOIN Marcas b ON b.MarcasId = a.MarcaId " +
+                    "LEFT JOIN Categorias c ON c.CategoriaId = a.CategoriaId " +
+                    "LEFT JOIN Genero d ON d.GeneroId = a.GeneroId " +
+                    "WHERE a.Estado = 1", con);
                 cmd.CommandType = CommandType.Text;
 
                 using (var reader = await cmd.ExecuteReaderAsync())
@@ -55,7 +62,15 @@ namespace MrPerezApiCore.Data
             using (var con = new SqlConnection(conexion))
             {
                 await con.OpenAsync();
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Productos WHERE ProductoId = @PProductoId", con);
+                SqlCommand cmd = new SqlCommand("SELECT a.ProductoId, a.Nombre, a.Descripcion, a.Cantidad, a.Precio, a.MarcaId, " +
+                    "a.CategoriaId, a.GeneroId, a.Estado, b.Nombre AS MarcaNombre, b.Proveedor AS ProveedorMarca, " +
+                    "c.Descripcion AS DescripcionCategoria, c.Nombre AS NombreCategoria, d.Nombre AS GeneroNombre, d.Resumen AS GeneroResumen " +
+                    "FROM Productos a " +
+                    "LEFT JOIN Marcas b ON b.MarcasId = a.MarcaId " +
+                    "LEFT JOIN Categorias c ON c.CategoriaId = a.CategoriaId " +
+                    "LEFT JOIN Genero d ON d.GeneroId = a.GeneroId " +
+                    "WHERE a.Estado = 1 " +
+                    "AND a.ProductosId = @PProductosId", con);
                 cmd.Parameters.AddWithValue("@PProductosId", Id);
                 cmd.CommandType = CommandType.Text;
 

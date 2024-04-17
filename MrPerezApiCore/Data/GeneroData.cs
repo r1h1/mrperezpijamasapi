@@ -21,7 +21,7 @@ namespace MrPerezApiCore.Data
             using (var con = new SqlConnection(conexion))
             {
                 await con.OpenAsync();
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Genero", con);
+                SqlCommand cmd = new SqlCommand("SELECT * FROM Genero WHERE Estado = 1", con);
                 cmd.CommandType = CommandType.Text;
 
                 using (var reader = await cmd.ExecuteReaderAsync())
@@ -48,7 +48,7 @@ namespace MrPerezApiCore.Data
             using (var con = new SqlConnection(conexion))
             {
                 await con.OpenAsync();
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Genero WHERE GeneroId = @PGeneroId", con);
+                SqlCommand cmd = new SqlCommand("SELECT * FROM Genero WHERE GeneroId = @PGeneroId AND Estado = 1", con);
                 cmd.Parameters.AddWithValue("@PGeneroId", Id);
                 cmd.CommandType = CommandType.Text;
 

@@ -23,7 +23,13 @@ namespace MrPerezApiCore.Data
             using (var con = new SqlConnection(conexion))
             {
                 await con.OpenAsync();
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Carrito", con);
+                SqlCommand cmd = new SqlCommand("SELECT a.CarritoId,a.ProductoId,a.UsuarioId,a.Cantidad,a.TotalCantidad," +
+                    "a.Estado,b.NombreCompleto,b.Nit,b.Ciudad,b.Direccion,b.Municipio,b.Pais,b.Referencia,b.Telefono," +
+                    "c.Cantidad,c.Descripcion,c.Nombre,c.Precio " +
+                    "FROM Carrito a " +
+                    "LEFT JOIN Usuario b ON b.UsuarioId = a.UsuarioId " +
+                    "LEFT JOIN Productos c ON c.ProductoId = a.ProductoId " +
+                    "WHERE a.Estado = 1", con);
                 cmd.CommandType = CommandType.Text;
 
                 using (var reader = await cmd.ExecuteReaderAsync())
@@ -52,8 +58,52 @@ namespace MrPerezApiCore.Data
             using (var con = new SqlConnection(conexion))
             {
                 await con.OpenAsync();
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Carrito WHERE CarritoId = @PCarritoId", con);
+                SqlCommand cmd = new SqlCommand("SELECT a.CarritoId,a.ProductoId,a.UsuarioId,a.Cantidad,a.TotalCantidad," +
+                    "a.Estado,b.NombreCompleto,b.Nit,b.Ciudad,b.Direccion,b.Municipio,b.Pais,b.Referencia,b.Telefono," +
+                    "c.Cantidad,c.Descripcion,c.Nombre,c.Precio " +
+                    "FROM Carrito a " +
+                    "LEFT JOIN Usuario b ON b.UsuarioId = a.UsuarioId " +
+                    "LEFT JOIN Productos c ON c.ProductoId = a.ProductoId " +
+                    "WHERE a.Estado = 1 " +
+                    "AND a.CarritoId = @PCarritoId", con);
                 cmd.Parameters.AddWithValue("@PCarritoId", Id);
+                cmd.CommandType = CommandType.Text;
+
+                using (var reader = await cmd.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        objeto = new Carrito
+                        {
+                            CarritoId = Convert.ToInt32(reader["CarritoId"]),
+                            ProductoId = reader["ProductoId"] != DBNull.Value ? Convert.ToInt32(reader["ProductoId"]) : null,
+                            UsuarioId = reader["UsuarioId"] != DBNull.Value ? Convert.ToInt32(reader["UsuarioId"]) : null,
+                            Cantidad = reader["Cantidad"] != DBNull.Value ? Convert.ToInt32(reader["Cantidad"]) : null,
+                            TotalCantidad = reader["TotalCantidad"] != DBNull.Value ? Convert.ToDecimal(reader["TotalCantidad"]) : null,
+                            Estado = Convert.ToInt32(reader["Estado"])
+                        };
+                    }
+                }
+            }
+            return objeto;
+        }
+
+        public async Task<Carrito> ObtenerPorUsuario(int UsuarioId)
+        {
+            Carrito objeto = new Carrito();
+
+            using (var con = new SqlConnection(conexion))
+            {
+                await con.OpenAsync();
+                SqlCommand cmd = new SqlCommand("SELECT a.CarritoId,a.ProductoId,a.UsuarioId,a.Cantidad,a.TotalCantidad," +
+                    "a.Estado,b.NombreCompleto,b.Nit,b.Ciudad,b.Direccion,b.Municipio,b.Pais,b.Referencia,b.Telefono," +
+                    "c.Cantidad,c.Descripcion,c.Nombre,c.Precio " +
+                    "FROM Carrito a " +
+                    "LEFT JOIN Usuario b ON b.UsuarioId = a.UsuarioId " +
+                    "LEFT JOIN Productos c ON c.ProductoId = a.ProductoId " +
+                    "WHERE a.UsuarioId = @PUsuarioId " +
+                    "AND a.Estado = 1", con);
+                cmd.Parameters.AddWithValue("@PUsuarioId", UsuarioId);
                 cmd.CommandType = CommandType.Text;
 
                 using (var reader = await cmd.ExecuteReaderAsync())

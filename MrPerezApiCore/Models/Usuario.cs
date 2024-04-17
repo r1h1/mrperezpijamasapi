@@ -12,6 +12,8 @@
         public string? Pais { get; set; }
         public string? Referencia { get; set; }
         public string? Nit { get; set; }
+
+        public int RolId { get; set; }
         public int Estado { get; set; }
     }
 }

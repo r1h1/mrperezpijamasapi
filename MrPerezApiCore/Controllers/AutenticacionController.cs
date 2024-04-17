@@ -9,7 +9,6 @@ namespace MrPerezApiCore.Controllers
 {
     [EnableCors("NuevaPolitica")]
     [Route("api/[controller]")]
-    [Authorize]
     [ApiController]
     public class AutenticacionController : ControllerBase
     {
@@ -22,6 +21,7 @@ namespace MrPerezApiCore.Controllers
 
         //GET METHOD
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Lista()
         {
             List<Autenticacion> Lista = await _autenticacionData.Lista();
@@ -30,6 +30,7 @@ namespace MrPerezApiCore.Controllers
 
         //GET WITH ID METHOD
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> Obtener(int id)
         {
             Autenticacion objeto = await _autenticacionData.Obtener(id);
@@ -38,7 +39,7 @@ namespace MrPerezApiCore.Controllers
 
         //POST METHOD
         [HttpPost]
-        public async Task<IActionResult> Crear([FromBody] Autenticacion objeto)
+        public async Task<IActionResult> Crear([FromBody] AutenticacionInsertadoEditado objeto)
         {
             bool respuesta = await _autenticacionData.Crear(objeto);
             return StatusCode(StatusCodes.Status200OK, new { isSuccess = respuesta });
@@ -46,7 +47,8 @@ namespace MrPerezApiCore.Controllers
 
         //PUT METHOD
         [HttpPut]
-        public async Task<IActionResult> Editar([FromBody] Autenticacion objeto)
+        [Authorize]
+        public async Task<IActionResult> Editar([FromBody] AutenticacionInsertadoEditado objeto)
         {
             bool respuesta = await _autenticacionData.Editar(objeto);
             return StatusCode(StatusCodes.Status200OK, new { isSuccess = respuesta });

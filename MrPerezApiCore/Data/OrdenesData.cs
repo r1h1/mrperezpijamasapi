@@ -24,7 +24,14 @@ namespace MrPerezApiCore.Data
             using (var con = new SqlConnection(conexion))
             {
                 await con.OpenAsync();
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Ordenes", con);
+                SqlCommand cmd = new SqlCommand("SELECT a.OrdenId, a.NumeroDeOrden, a.Descripcion, a.ProductoId, a.UsuarioId," +
+                    " a.Cantidad, a.TotalCantidad, a.FechaPedido, a.FechaPago, a.FechaRuta, a.FechaEntrega, a.Estado, " +
+                    "a.Activo, b.Cantidad, b.CategoriaId, b.Descripcion, b.GeneroId, b.MarcaId, b.Nombre, b.Precio, " +
+                    "c.Ciudad, c.Direccion, c.Email, c.Municipio, c.Nit, c.NombreCompleto, c.Pais, c.Referencia, c.Telefono " +
+                    "FROM Ordenes a " +
+                    "LEFT JOIN Productos b ON b.ProductoId = a.ProductoId " +
+                    "LEFT JOIN Usuario c ON c.UsuarioId = a.UsuarioId " +
+                    "WHERE a.Activo = 1", con);
                 cmd.CommandType = CommandType.Text;
 
                 using (var reader = await cmd.ExecuteReaderAsync())
@@ -60,7 +67,15 @@ namespace MrPerezApiCore.Data
             using (var con = new SqlConnection(conexion))
             {
                 await con.OpenAsync();
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Ordenes WHERE OrdenId = @OrdenId", con);
+                SqlCommand cmd = new SqlCommand("SELECT a.OrdenId,a.NumeroDeOrden,a.Descripcion,a.ProductoId,a.UsuarioId," +
+                    "a.Cantidad,a.TotalCantidad,a.FechaPedido,a.FechaPago,a.FechaRuta,a.FechaEntrega,a.Estado,a.Activo," +
+                    "b.Cantidad,b.CategoriaId,b.Descripcion,b.GeneroId,b.MarcaId,b.Nombre,b.Precio,c.Ciudad,c.Direccion," +
+                    "c.Email,c.Municipio,c.Nit,c.NombreCompleto,c.Pais,c.Referencia,c.Telefono " +
+                    "FROM Ordenes a " +
+                    "LEFT JOIN Productos b ON b.ProductoId = a.ProductoId " +
+                    "LEFT JOIN Usuario c ON c.UsuarioId = a.UsuarioId " +
+                    "WHERE a.Activo = 1 " +
+                    "AND a.OrdenId = @POrdenId", con);
                 cmd.Parameters.AddWithValue("@OrdenId", id);
                 cmd.CommandType = CommandType.Text;
 

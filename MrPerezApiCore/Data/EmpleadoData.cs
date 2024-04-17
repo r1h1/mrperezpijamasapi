@@ -23,7 +23,13 @@ namespace MrPerezApiCore.Data
             using (var con = new SqlConnection(conexion))
             {
                 await con.OpenAsync();
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Empleado", con);
+                SqlCommand cmd = new SqlCommand("SELECT a.EmpleadoId,a.NombreCompleto,a.Direccion,a.Telefono,a.Email," +
+                    "a.Ciudad,a.Municipio,a.Pais,a.Sexo,a.DPI,a.Nit,a.RolId,a.EmpresaId,a.Estado,b.Nombre,b.Permiso," +
+                    "b.RolId,c.Direccion,c.Nit,c.Telefono " +
+                    "FROM Empleado a " +
+                    "LEFT JOIN Rol b ON b.RolId = a.RolId " +
+                    "LEFT JOIN Empresa c ON c.EmpresaId = a.EmpresaId " +
+                    "WHERE a.Estado = 1", con);
                 cmd.CommandType = CommandType.Text;
 
                 using (var reader = await cmd.ExecuteReaderAsync())
@@ -60,7 +66,14 @@ namespace MrPerezApiCore.Data
             using (var con = new SqlConnection(conexion))
             {
                 await con.OpenAsync();
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Empleado WHERE EmpleadoId = @PEmpleadoId", con);
+                SqlCommand cmd = new SqlCommand("SELECT a.EmpleadoId,a.NombreCompleto,a.Direccion,a.Telefono,a.Email," +
+                    "a.Ciudad,a.Municipio,a.Pais,a.Sexo,a.DPI,a.Nit,a.RolId,a.EmpresaId,a.Estado,b.Nombre,b.Permiso," +
+                    "b.RolId,c.Direccion,c.Nit,c.Telefono " +
+                    "FROM Empleado a " +
+                    "LEFT JOIN Rol b ON b.RolId = a.RolId " +
+                    "LEFT JOIN Empresa c ON c.EmpresaId = a.EmpresaId " +
+                    "WHERE a.Estado = 1 " +
+                    "AND a.EmpleadoId = @PEmpleadoId", con);
                 cmd.Parameters.AddWithValue("@PEmpleadoId", Id);
                 cmd.CommandType = CommandType.Text;
 

@@ -21,7 +21,7 @@ namespace MrPerezApiCore.Data
             using (var con = new SqlConnection(conexion))
             {
                 await con.OpenAsync();
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Usuario", con);
+                SqlCommand cmd = new SqlCommand("SELECT * FROM Usuario WHERE Estado = 1", con);
                 cmd.CommandType = CommandType.Text;
 
                 using (var reader = await cmd.ExecuteReaderAsync())
@@ -39,7 +39,8 @@ namespace MrPerezApiCore.Data
                             Municipio = reader["Municipio"].ToString(),
                             Pais = reader["Pais"].ToString(),
                             Referencia = reader["Referencia"].ToString(),
-                            Nit = reader["Nit"].ToString(),                            
+                            Nit = reader["Nit"].ToString(),
+                            RolId = Convert.ToInt32(reader["RolId"]),
                             Estado = Convert.ToInt32(reader["Estado"])
                         });
                     }
@@ -55,7 +56,7 @@ namespace MrPerezApiCore.Data
             using (var con = new SqlConnection(conexion))
             {
                 await con.OpenAsync();
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Usuario WHERE UsuarioId = @PUsuarioId", con);
+                SqlCommand cmd = new SqlCommand("SELECT * FROM Usuario WHERE UsuarioId = @PUsuarioId AND Estado = 1", con);
                 cmd.Parameters.AddWithValue("@PUsuarioId", Id);
                 cmd.CommandType = CommandType.Text;
 
@@ -75,6 +76,7 @@ namespace MrPerezApiCore.Data
                             Pais = reader["Pais"].ToString(),
                             Referencia = reader["Referencia"].ToString(),
                             Nit = reader["Nit"].ToString(),
+                            RolId = Convert.ToInt32(reader["RolId"]),
                             Estado = Convert.ToInt32(reader["Estado"])
                         };
                     }
@@ -90,7 +92,7 @@ namespace MrPerezApiCore.Data
             using (var con = new SqlConnection(conexion))
             {
 
-                SqlCommand cmd = new SqlCommand("INSERT INTO Usuario(NombreCompleto,Direccion,Telefono,Email,Ciudad,Municipio,Pais,Referencia,Nit,Estado) VALUES(@PNombreCompleto,@PDireccion,@PTelefono,@PEmail,@PCiudad,@PMunicipio,@PPais,@PReferencia,@PNit,@PEstado)", con);
+                SqlCommand cmd = new SqlCommand("INSERT INTO Usuario(NombreCompleto,Direccion,Telefono,Email,Ciudad,Municipio,Pais,Referencia,Nit,RolId,Estado) VALUES(@PNombreCompleto,@PDireccion,@PTelefono,@PEmail,@PCiudad,@PMunicipio,@PPais,@PReferencia,@PNit,@PRolId,@PEstado)", con);
                 cmd.Parameters.AddWithValue("@PNombreCompleto", objeto.NombreCompleto);
                 cmd.Parameters.AddWithValue("@PDireccion", objeto.Direccion);
                 cmd.Parameters.AddWithValue("@PTelefono", objeto.Telefono);
@@ -100,6 +102,7 @@ namespace MrPerezApiCore.Data
                 cmd.Parameters.AddWithValue("@PPais", objeto.Pais);
                 cmd.Parameters.AddWithValue("@PReferencia", objeto.Referencia);
                 cmd.Parameters.AddWithValue("@PNit", objeto.Nit);
+                cmd.Parameters.AddWithValue("@PRolId", objeto.RolId);
                 cmd.Parameters.AddWithValue("@PEstado", objeto.Estado);
 
                 cmd.CommandType = CommandType.Text;
@@ -123,7 +126,7 @@ namespace MrPerezApiCore.Data
             using (var con = new SqlConnection(conexion))
             {
 
-                SqlCommand cmd = new SqlCommand("UPDATE Usuario SET NombreCompleto = @PNombreCompleto, Direccion = @PDireccion, Telefono = @PTelefono, Email = @PEmail, Ciudad = @PCiudad, Municipio = @PMunicipio, Pais = @PPais, Referencia = @PReferencia, Nit = @PNit, Estado = @PEstado\r\nWHERE UsuarioId = @PUsuarioId", con);
+                SqlCommand cmd = new SqlCommand("UPDATE Usuario SET NombreCompleto = @PNombreCompleto, Direccion = @PDireccion, Telefono = @PTelefono, Email = @PEmail, Ciudad = @PCiudad, Municipio = @PMunicipio, Pais = @PPais, Referencia = @PReferencia, Nit = @PNit, RolId = @PRolId, Estado = @PEstado WHERE UsuarioId = @PUsuarioId", con);
                 cmd.Parameters.AddWithValue("@PUsuarioId", objeto.UsuarioId);
                 cmd.Parameters.AddWithValue("@PNombreCompleto", objeto.NombreCompleto);
                 cmd.Parameters.AddWithValue("@PDireccion", objeto.Direccion);
@@ -134,6 +137,7 @@ namespace MrPerezApiCore.Data
                 cmd.Parameters.AddWithValue("@PPais", objeto.Pais);
                 cmd.Parameters.AddWithValue("@PReferencia", objeto.Referencia);
                 cmd.Parameters.AddWithValue("@PNit", objeto.Nit);
+                cmd.Parameters.AddWithValue("@PRolId", objeto.RolId);
                 cmd.Parameters.AddWithValue("@PEstado", objeto.Estado);
                 cmd.CommandType = CommandType.Text;
                 try

@@ -21,7 +21,10 @@ namespace MrPerezApiCore.Data
             using (var con = new SqlConnection(conexion))
             {
                 await con.OpenAsync();
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Departamento", con);
+                SqlCommand cmd = new SqlCommand("SELECT a.DepartamentoId,a.EmpresaId,a.Estado,a.Nombre,b.Direccion,b.Nit,b.Telefono " +
+                    "FROM Departamento a " +
+                    "LEFT JOIN Empresa b ON b.EmpresaId = a.EmpresaId " +
+                    "WHERE a.Estado = 1", con);
                 cmd.CommandType = CommandType.Text;
 
                 using (var reader = await cmd.ExecuteReaderAsync())
@@ -48,7 +51,11 @@ namespace MrPerezApiCore.Data
             using (var con = new SqlConnection(conexion))
             {
                 await con.OpenAsync();
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Departamento WHERE DepartamentoId = @PDepartamentoId", con);
+                SqlCommand cmd = new SqlCommand("SELECT a.DepartamentoId,a.EmpresaId,a.Estado,a.Nombre,b.Direccion,b.Nit,b.Telefono " +
+                    "FROM Departamento a " +
+                    "LEFT JOIN Empresa b ON b.EmpresaId = a.EmpresaId " +
+                    "WHERE a.Estado = 1 " +
+                    "AND a.DepartamentoId = @PDepartamentoId", con);
                 cmd.Parameters.AddWithValue("@PDepartamentoId", Id);
                 cmd.CommandType = CommandType.Text;
 

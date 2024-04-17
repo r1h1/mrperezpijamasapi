@@ -45,3 +45,4 @@ C:\Users\drivas\OneDrive - Productos Alimenticios Centroamericanos, S.A\Escritor
 C:\Users\drivas\OneDrive - Productos Alimenticios Centroamericanos, S.A\Escritorio\MrPerezApiCore\MrPerezApiCore\bin\Release\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\drivas\OneDrive - Productos Alimenticios Centroamericanos, S.A\Escritorio\MrPerezApiCore\MrPerezApiCore\bin\Release\net8.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\drivas\OneDrive - Productos Alimenticios Centroamericanos, S.A\Escritorio\MrPerezApiCore\MrPerezApiCore\bin\Release\net8.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\drivas\OneDrive - Productos Alimenticios Centroamericanos, S.A\Escritorio\MrPerezApiCore\MrPerezApiCore\obj\Release\net8.0\MrPerezApiCore.sourcelink.json

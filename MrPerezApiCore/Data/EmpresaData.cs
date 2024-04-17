@@ -21,7 +21,7 @@ namespace MrPerezApiCore.Data
             using (var con = new SqlConnection(conexion))
             {
                 await con.OpenAsync();
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Empresa", con);
+                SqlCommand cmd = new SqlCommand("SELECT * FROM Empresa WHERE Estado = 1", con);
                 cmd.CommandType = CommandType.Text;
 
                 using (var reader = await cmd.ExecuteReaderAsync())
@@ -49,7 +49,7 @@ namespace MrPerezApiCore.Data
             using (var con = new SqlConnection(conexion))
             {
                 await con.OpenAsync();
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Empresa WHERE EmpresaId = @PEmpresaId", con);
+                SqlCommand cmd = new SqlCommand("SELECT * FROM Empresa WHERE EmpresaId = @PEmpresaId AND Estado = 1", con);
                 cmd.Parameters.AddWithValue("@PEmpresaId", Id);
                 cmd.CommandType = CommandType.Text;
 

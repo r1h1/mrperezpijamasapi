@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MrPerezApiCore")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e2f9b39366085870d0c9ac6d102baa0c78f1d051")]
 [assembly: System.Reflection.AssemblyProductAttribute("MrPerezApiCore")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MrPerezApiCore")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

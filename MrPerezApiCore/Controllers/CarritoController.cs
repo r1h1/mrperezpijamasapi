@@ -38,6 +38,15 @@ namespace MrPerezApiCore.Controllers
             return StatusCode(StatusCodes.Status200OK, objeto);
         }
 
+        // GET: api/Carrito/FilterByUser/5
+        [HttpGet("FilterByUser/{usuarioId}")]
+        public async Task<IActionResult> ObtenerPorUsuario(int usuarioId)
+        {
+            Carrito objeto = await _carritoData.ObtenerPorUsuario(usuarioId);
+            return StatusCode(StatusCodes.Status200OK, objeto);
+        }
+
+
         // POST: api/Carrito
         [HttpPost]
         public async Task<IActionResult> Crear([FromBody] Carrito objeto)

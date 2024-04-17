@@ -31,6 +31,7 @@ C:\Users\drivas\OneDrive - Productos Alimenticios Centroamericanos, S.A\Escritor
 C:\Users\drivas\OneDrive - Productos Alimenticios Centroamericanos, S.A\Escritorio\MrPerezApiCore\MrPerezApiCore\obj\Debug\net8.0\MrPerezApiCore.csproj.CoreCompileInputs.cache
 C:\Users\drivas\OneDrive - Productos Alimenticios Centroamericanos, S.A\Escritorio\MrPerezApiCore\MrPerezApiCore\obj\Debug\net8.0\MrPerezApiCore.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\drivas\OneDrive - Productos Alimenticios Centroamericanos, S.A\Escritorio\MrPerezApiCore\MrPerezApiCore\obj\Debug\net8.0\MrPerezApiCore.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\drivas\OneDrive - Productos Alimenticios Centroamericanos, S.A\Escritorio\MrPerezApiCore\MrPerezApiCore\obj\Debug\net8.0\MrPerezApiCore.sourcelink.json
 C:\Users\drivas\OneDrive - Productos Alimenticios Centroamericanos, S.A\Escritorio\MrPerezApiCore\MrPerezApiCore\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\drivas\OneDrive - Productos Alimenticios Centroamericanos, S.A\Escritorio\MrPerezApiCore\MrPerezApiCore\obj\Debug\net8.0\staticwebassets.development.json
 C:\Users\drivas\OneDrive - Productos Alimenticios Centroamericanos, S.A\Escritorio\MrPerezApiCore\MrPerezApiCore\obj\Debug\net8.0\staticwebassets\msbuild.MrPerezApiCore.Microsoft.AspNetCore.StaticWebAssets.props

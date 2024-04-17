@@ -21,7 +21,11 @@ namespace MrPerezApiCore.Data
             using (var con = new SqlConnection(conexion))
             {
                 await con.OpenAsync();
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Pagina_Acceso", con);
+                SqlCommand cmd = new SqlCommand("SELECT a.PaginaAccesoId,a.RolIdPertenece,a.FormularioAcceso,a.Estado," +
+                    "b.Nombre,b.Permiso " +
+                    "FROM Pagina_Acceso a " +
+                    "LEFT JOIN Rol b ON b.RolId = a.RolIdPertenece " +
+                    "WHERE a.Estado = 1", con);
                 cmd.CommandType = CommandType.Text;
 
                 using (var reader = await cmd.ExecuteReaderAsync())
@@ -48,7 +52,12 @@ namespace MrPerezApiCore.Data
             using (var con = new SqlConnection(conexion))
             {
                 await con.OpenAsync();
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Pagina_Acceso WHERE PaginaAccesoId = @PPaginaAccesoId", con);
+                SqlCommand cmd = new SqlCommand("SELECT a.PaginaAccesoId,a.RolIdPertenece,a.FormularioAcceso,a.Estado," +
+                    "b.Nombre,b.Permiso " +
+                    "FROM Pagina_Acceso a " +
+                    "LEFT JOIN Rol b ON b.RolId = a.RolIdPertenece " +
+                    "WHERE a.Estado = 1 " +
+                    "AND a.PaginaAccesoId = @PPaginaAccesoId", con);
                 cmd.Parameters.AddWithValue("@PPaginaAccesoId", Id);
                 cmd.CommandType = CommandType.Text;
 
