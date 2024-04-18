@@ -76,7 +76,52 @@ namespace MrPerezApiCore.Data
                     "LEFT JOIN Usuario c ON c.UsuarioId = a.UsuarioId " +
                     "WHERE a.Activo = 1 " +
                     "AND a.OrdenId = @POrdenId", con);
-                cmd.Parameters.AddWithValue("@OrdenId", id);
+                cmd.Parameters.AddWithValue("@POrdenId", id);
+                cmd.CommandType = CommandType.Text;
+
+                using (var reader = await cmd.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        objeto = new Ordenes
+                        {
+                            OrdenId = Convert.ToInt32(reader["OrdenId"]),
+                            NumeroDeOrden = reader["NumeroDeOrden"].ToString(),
+                            Descripcion = reader["Descripcion"].ToString(),
+                            ProductoId = reader["ProductoId"] == DBNull.Value ? null : (int?)reader["ProductoId"],
+                            UsuarioId = reader["UsuarioId"] == DBNull.Value ? null : (int?)reader["UsuarioId"],
+                            Cantidad = reader["Cantidad"] == DBNull.Value ? null : (int?)reader["Cantidad"],
+                            TotalCantidad = reader["TotalCantidad"] == DBNull.Value ? null : (decimal?)reader["TotalCantidad"],
+                            FechaPedido = reader["FechaPedido"] == DBNull.Value ? null : (DateTime?)reader["FechaPedido"],
+                            FechaPago = reader["FechaPago"] == DBNull.Value ? null : (DateTime?)reader["FechaPago"],
+                            FechaRuta = reader["FechaRuta"] == DBNull.Value ? null : (DateTime?)reader["FechaRuta"],
+                            FechaEntrega = reader["FechaEntrega"] == DBNull.Value ? null : (DateTime?)reader["FechaEntrega"],
+                            Estado = Convert.ToInt32(reader["Estado"]),
+                            Activo = Convert.ToInt32(reader["Activo"])
+                        };
+                    }
+                }
+            }
+            return objeto;
+        }
+
+        public async Task<Ordenes> ObtenerPorNumeroOrden(string numeroOrden)
+        {
+            Ordenes objeto = new Ordenes();
+
+            using (var con = new SqlConnection(conexion))
+            {
+                await con.OpenAsync();
+                SqlCommand cmd = new SqlCommand("SELECT a.OrdenId,a.NumeroDeOrden,a.Descripcion,a.ProductoId,a.UsuarioId," +
+                    "a.Cantidad,a.TotalCantidad,a.FechaPedido,a.FechaPago,a.FechaRuta,a.FechaEntrega,a.Estado,a.Activo," +
+                    "b.Cantidad,b.CategoriaId,b.Descripcion,b.GeneroId,b.MarcaId,b.Nombre,b.Precio,c.Ciudad,c.Direccion," +
+                    "c.Email,c.Municipio,c.Nit,c.NombreCompleto,c.Pais,c.Referencia,c.Telefono " +
+                    "FROM Ordenes a " +
+                    "LEFT JOIN Productos b ON b.ProductoId = a.ProductoId " +
+                    "LEFT JOIN Usuario c ON c.UsuarioId = a.UsuarioId " +
+                    "WHERE a.Activo = 1 " +
+                    "AND a.NumeroDeOrden = @PNumeroDeOrden", con);
+                cmd.Parameters.AddWithValue("@PNumeroDeOrden", numeroOrden);
                 cmd.CommandType = CommandType.Text;
 
                 using (var reader = await cmd.ExecuteReaderAsync())

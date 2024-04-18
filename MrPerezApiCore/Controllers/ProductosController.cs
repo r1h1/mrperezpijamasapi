@@ -9,7 +9,6 @@ namespace MrPerezApiCore.Controllers
 {
     [EnableCors("NuevaPolitica")]
     [Route("api/[controller]")]
-    [Authorize]
     [ApiController]
     public class ProductosController : ControllerBase
     {
@@ -38,6 +37,7 @@ namespace MrPerezApiCore.Controllers
 
         //POST METHOD
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Crear([FromBody] Productos objeto)
         {
             bool respuesta = await _productosData.Crear(objeto);
@@ -46,6 +46,7 @@ namespace MrPerezApiCore.Controllers
 
         //PUT METHOD
         [HttpPut]
+        [Authorize]
         public async Task<IActionResult> Editar([FromBody] Productos objeto)
         {
             bool respuesta = await _productosData.Editar(objeto);

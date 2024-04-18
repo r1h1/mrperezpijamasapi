@@ -85,14 +85,14 @@ namespace MrPerezApiCore.Data
             return objeto;
         }
 
-        public async Task<bool> Crear(Usuario objeto)
+        public async Task<(bool, int)> Crear(Usuario objeto)
         {
             bool respuesta = true;
+            int ultimoIdInsertado = -1;
 
             using (var con = new SqlConnection(conexion))
             {
-
-                SqlCommand cmd = new SqlCommand("INSERT INTO Usuario(NombreCompleto,Direccion,Telefono,Email,Ciudad,Municipio,Pais,Referencia,Nit,RolId,Estado) VALUES(@PNombreCompleto,@PDireccion,@PTelefono,@PEmail,@PCiudad,@PMunicipio,@PPais,@PReferencia,@PNit,@PRolId,@PEstado)", con);
+                SqlCommand cmd = new SqlCommand("INSERT INTO Usuario(NombreCompleto,Direccion,Telefono,Email,Ciudad,Municipio,Pais,Referencia,Nit,RolId,Estado) VALUES(@PNombreCompleto,@PDireccion,@PTelefono,@PEmail,@PCiudad,@PMunicipio,@PPais,@PReferencia,@PNit,@PRolId,@PEstado); SELECT SCOPE_IDENTITY();", con);
                 cmd.Parameters.AddWithValue("@PNombreCompleto", objeto.NombreCompleto);
                 cmd.Parameters.AddWithValue("@PDireccion", objeto.Direccion);
                 cmd.Parameters.AddWithValue("@PTelefono", objeto.Telefono);
@@ -109,15 +109,21 @@ namespace MrPerezApiCore.Data
                 try
                 {
                     await con.OpenAsync();
-                    respuesta = await cmd.ExecuteNonQueryAsync() > 0 ? true : false;
+                    object result = await cmd.ExecuteScalarAsync();
+                    if (result != null)
+                    {
+                        ultimoIdInsertado = Convert.ToInt32(result);
+                        respuesta = true;
+                    }
                 }
                 catch
                 {
                     respuesta = false;
                 }
             }
-            return respuesta;
+            return (respuesta, ultimoIdInsertado);
         }
+
 
         public async Task<bool> Editar(Usuario objeto)
         {

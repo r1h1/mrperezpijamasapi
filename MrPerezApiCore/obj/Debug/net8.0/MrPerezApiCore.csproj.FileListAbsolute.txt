@@ -46,3 +46,5 @@ C:\Users\drivas\OneDrive - Productos Alimenticios Centroamericanos, S.A\Escritor
 C:\Users\drivas\OneDrive - Productos Alimenticios Centroamericanos, S.A\Escritorio\MrPerezApiCore\MrPerezApiCore\obj\Debug\net8.0\MrPerezApiCore.pdb
 C:\Users\drivas\OneDrive - Productos Alimenticios Centroamericanos, S.A\Escritorio\MrPerezApiCore\MrPerezApiCore\obj\Debug\net8.0\MrPerezApiCore.genruntimeconfig.cache
 C:\Users\drivas\OneDrive - Productos Alimenticios Centroamericanos, S.A\Escritorio\MrPerezApiCore\MrPerezApiCore\obj\Debug\net8.0\ref\MrPerezApiCore.dll
+C:\Users\drivas\OneDrive - Productos Alimenticios Centroamericanos, S.A\Escritorio\MrPerezApiCore\MrPerezApiCore\bin\Debug\net8.0\AspNetCoreRateLimit.dll
+C:\Users\drivas\OneDrive - Productos Alimenticios Centroamericanos, S.A\Escritorio\MrPerezApiCore\MrPerezApiCore\bin\Debug\net8.0\Newtonsoft.Json.dll

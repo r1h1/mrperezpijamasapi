@@ -9,7 +9,6 @@ namespace MrPerezApiCore.Controllers
 {
     [EnableCors("NuevaPolitica")]
     [Route("api/[controller]")]
-    [Authorize]
     [ApiController]
     public class EmpresaController : ControllerBase
     {
@@ -22,6 +21,7 @@ namespace MrPerezApiCore.Controllers
 
         //GET METHOD
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Lista()
         {
             List<Empresa> Lista = await _empresaData.Lista();
@@ -30,6 +30,7 @@ namespace MrPerezApiCore.Controllers
 
         //GET WITH ID METHOD
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> Obtener(int id)
         {
             Empresa objeto = await _empresaData.Obtener(id);
@@ -38,6 +39,7 @@ namespace MrPerezApiCore.Controllers
 
         //POST METHOD
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Crear([FromBody] Empresa objeto)
         {
             bool respuesta = await _empresaData.Crear(objeto);
@@ -46,6 +48,7 @@ namespace MrPerezApiCore.Controllers
 
         //PUT METHOD
         [HttpPut]
+        [Authorize]
         public async Task<IActionResult> Editar([FromBody] Empresa objeto)
         {
             bool respuesta = await _empresaData.Editar(objeto);

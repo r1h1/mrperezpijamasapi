@@ -11,7 +11,6 @@ namespace MrPerezApiCore.Controllers
 {
     [EnableCors("NuevaPolitica")]
     [Route("api/[controller]")]
-    [Authorize]
     [ApiController]
     public class CarritoController : ControllerBase
     {
@@ -24,6 +23,7 @@ namespace MrPerezApiCore.Controllers
 
         // GET: api/Carrito
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Lista()
         {
             List<Carrito> lista = await _carritoData.Lista();
@@ -32,6 +32,7 @@ namespace MrPerezApiCore.Controllers
 
         // GET: api/Carrito/5
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> Obtener(int id)
         {
             Carrito objeto = await _carritoData.Obtener(id);

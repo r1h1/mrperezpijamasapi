@@ -37,13 +37,17 @@ namespace MrPerezApiCore.Controllers
             return StatusCode(StatusCodes.Status200OK, objeto);
         }
 
-        //POST METHOD
+        // POST METHOD
         [HttpPost]
         public async Task<IActionResult> Crear([FromBody] Usuario objeto)
         {
-            bool respuesta = await _usuarioData.Crear(objeto);
-            return StatusCode(StatusCodes.Status200OK, new { isSuccess = respuesta });
+            var resultadoInsercion = await _usuarioData.Crear(objeto);
+            bool insercionExitosa = resultadoInsercion.Item1;
+            int ultimoIdInsertado = resultadoInsercion.Item2;
+
+            return StatusCode(StatusCodes.Status200OK, new { insertedId = ultimoIdInsertado, isSuccess = insercionExitosa });
         }
+
 
         //PUT METHOD
         [HttpPut]

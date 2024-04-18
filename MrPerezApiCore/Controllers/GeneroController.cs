@@ -9,7 +9,6 @@ namespace MrPerezApiCore.Controllers
 {
     [EnableCors("NuevaPolitica")]
     [Route("api/[controller]")]
-    [Authorize]
     [ApiController]
     public class GeneroController : ControllerBase
     {
@@ -30,6 +29,7 @@ namespace MrPerezApiCore.Controllers
 
         //GET WITH ID METHOD
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> Obtener(int id)
         {
             Genero objeto = await _generoData.Obtener(id);
@@ -38,6 +38,7 @@ namespace MrPerezApiCore.Controllers
 
         //POST METHOD
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Crear([FromBody] Genero objeto)
         {
             bool respuesta = await _generoData.Crear(objeto);
@@ -46,6 +47,7 @@ namespace MrPerezApiCore.Controllers
 
         //PUT METHOD
         [HttpPut]
+        [Authorize]
         public async Task<IActionResult> Editar([FromBody] Genero objeto)
         {
             bool respuesta = await _generoData.Editar(objeto);

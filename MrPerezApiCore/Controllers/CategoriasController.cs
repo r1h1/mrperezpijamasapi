@@ -9,7 +9,6 @@ namespace MrPerezApiCore.Controllers
 {
     [EnableCors("NuevaPolitica")]
     [Route("api/[controller]")]
-    [Authorize]
     [ApiController]
     public class CategoriasController : ControllerBase
     {
@@ -30,6 +29,7 @@ namespace MrPerezApiCore.Controllers
 
         //GET WITH ID METHOD
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> Obtener(int id)
         {
             Categorias objeto = await _categoriasData.Obtener(id);
@@ -38,6 +38,7 @@ namespace MrPerezApiCore.Controllers
 
         //POST METHOD
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Crear([FromBody] Categorias objeto)
         {
             bool respuesta = await _categoriasData.Crear(objeto);
@@ -46,6 +47,7 @@ namespace MrPerezApiCore.Controllers
 
         //PUT METHOD
         [HttpPut]
+        [Authorize]
         public async Task<IActionResult> Editar([FromBody] Categorias objeto)
         {
             bool respuesta = await _categoriasData.Editar(objeto);

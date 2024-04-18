@@ -11,7 +11,6 @@ namespace MrPerezApiCore.Controllers
 {
     [EnableCors("NuevaPolitica")]
     [Route("api/[controller]")]
-    [Authorize]
     [ApiController]
     public class OrdenController : ControllerBase
     {
@@ -24,6 +23,7 @@ namespace MrPerezApiCore.Controllers
 
         // GET METHOD
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Lista()
         {
             List<Ordenes> lista = await _ordenesData.Lista();
@@ -32,14 +32,24 @@ namespace MrPerezApiCore.Controllers
 
         // GET WITH ID METHOD
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> Obtener(int id)
         {
             Ordenes objeto = await _ordenesData.Obtener(id);
             return StatusCode(StatusCodes.Status200OK, objeto);
         }
 
+        // GET WITH ID METHOD
+        [HttpGet("FilterByOrderNumber/{numeroOrden}")]
+        public async Task<IActionResult> ObtenerPorNumeroOrden(string numeroOrden)
+        {
+            Ordenes objeto = await _ordenesData.ObtenerPorNumeroOrden(numeroOrden);
+            return StatusCode(StatusCodes.Status200OK, objeto);
+        }
+
         // POST METHOD
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Crear([FromBody] Ordenes objeto)
         {
             bool respuesta = await _ordenesData.Crear(objeto);
@@ -48,6 +58,7 @@ namespace MrPerezApiCore.Controllers
 
         // PUT METHOD
         [HttpPut]
+        [Authorize]
         public async Task<IActionResult> Editar([FromBody] Ordenes objeto)
         {
             bool respuesta = await _ordenesData.Editar(objeto);
