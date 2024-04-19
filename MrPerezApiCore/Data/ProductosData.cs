@@ -23,7 +23,7 @@ namespace MrPerezApiCore.Data
             using (var con = new SqlConnection(conexion))
             {
                 await con.OpenAsync();
-                SqlCommand cmd = new SqlCommand("SELECT a.ProductoId, a.Nombre, a.Descripcion, a.Cantidad, a.Precio, a.MarcaId, " +
+                SqlCommand cmd = new SqlCommand("SELECT a.ProductoId, a.Nombre, a.Descripcion, a.Cantidad, a.Precio, a.Imagen, a.MarcaId, " +
                     "a.CategoriaId, a.GeneroId, a.Estado, b.Nombre AS MarcaNombre, b.Proveedor AS ProveedorMarca, " +
                     "c.Descripcion AS DescripcionCategoria, c.Nombre AS NombreCategoria, d.Nombre AS GeneroNombre, d.Resumen AS GeneroResumen " +
                     "FROM Productos a " +
@@ -44,6 +44,7 @@ namespace MrPerezApiCore.Data
                             Descripcion = reader["Descripcion"].ToString(),
                             Cantidad = reader["Cantidad"] != DBNull.Value ? Convert.ToInt32(reader["Cantidad"]) : (int?)null,
                             Precio = Convert.ToDecimal(reader["Precio"]),
+                            Imagen = reader["Imagen"].ToString(),
                             MarcaId = reader["MarcaId"] != DBNull.Value ? Convert.ToInt32(reader["MarcaId"]) : (int?)null,
                             MarcaNombre = reader["MarcaNombre"]?.ToString(),
                             ProveedorMarca = reader["ProveedorMarca"]?.ToString(),
@@ -69,7 +70,7 @@ namespace MrPerezApiCore.Data
             using (var con = new SqlConnection(conexion))
             {
                 await con.OpenAsync();
-                SqlCommand cmd = new SqlCommand("SELECT a.ProductoId, a.Nombre, a.Descripcion, a.Cantidad, a.Precio, a.MarcaId, " +
+                SqlCommand cmd = new SqlCommand("SELECT a.ProductoId, a.Nombre, a.Descripcion, a.Cantidad, a.Precio, a.Imagen, a.MarcaId, " +
                     "a.CategoriaId, a.GeneroId, a.Estado, b.Nombre AS MarcaNombre, b.Proveedor AS ProveedorMarca, " +
                     "c.Descripcion AS DescripcionCategoria, c.Nombre AS NombreCategoria, d.Nombre AS GeneroNombre, d.Resumen AS GeneroResumen " +
                     "FROM Productos a " +
@@ -92,6 +93,7 @@ namespace MrPerezApiCore.Data
                             Descripcion = reader["Descripcion"].ToString(),
                             Cantidad = reader["Cantidad"] != DBNull.Value ? Convert.ToInt32(reader["Cantidad"]) : (int?)null,
                             Precio = Convert.ToDecimal(reader["Precio"]),
+                            Imagen = reader["Imagen"].ToString(),
                             MarcaId = reader["MarcaId"] != DBNull.Value ? Convert.ToInt32(reader["MarcaId"]) : (int?)null,
                             MarcaNombre = reader["MarcaNombre"]?.ToString(),
                             ProveedorMarca = reader["ProveedorMarca"]?.ToString(),

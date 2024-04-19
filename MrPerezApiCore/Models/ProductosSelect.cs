@@ -7,6 +7,7 @@
         public string? Descripcion { get; set; }
         public int? Cantidad { get; set; }
         public decimal Precio { get; set; }
+        public string? Imagen { get; set; }
         public int? MarcaId { get; set; }
         public string? MarcaNombre { get; set; }
         public string? ProveedorMarca { get; set; }
