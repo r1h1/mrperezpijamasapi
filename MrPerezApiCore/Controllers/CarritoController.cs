@@ -39,17 +39,19 @@ namespace MrPerezApiCore.Controllers
             return StatusCode(StatusCodes.Status200OK, objeto);
         }
 
-        // GET: api/Carrito/FilterByUser/5
+        // GET: api/Carrito/FilterByUser/2
         [HttpGet("FilterByUser/{usuarioId}")]
+        [Authorize]
         public async Task<IActionResult> ObtenerPorUsuario(int usuarioId)
         {
-            Carrito objeto = await _carritoData.ObtenerPorUsuario(usuarioId);
+            CarritoPorUsuarioSelect objeto = await _carritoData.ObtenerPorUsuario(usuarioId);
             return StatusCode(StatusCodes.Status200OK, objeto);
         }
 
 
         // POST: api/Carrito
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Crear([FromBody] Carrito objeto)
         {
             bool respuesta = await _carritoData.Crear(objeto);
@@ -58,6 +60,7 @@ namespace MrPerezApiCore.Controllers
 
         // PUT: api/Carrito
         [HttpPut]
+        [Authorize]
         public async Task<IActionResult> Editar([FromBody] Carrito objeto)
         {
             bool respuesta = await _carritoData.Editar(objeto);
