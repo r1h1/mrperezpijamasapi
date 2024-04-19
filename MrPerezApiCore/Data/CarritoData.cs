@@ -88,9 +88,9 @@ namespace MrPerezApiCore.Data
             return objeto;
         }
 
-        public async Task<CarritoPorUsuarioSelect> ObtenerPorUsuario(int UsuarioId)
+        public async Task<List<CarritoPorUsuarioSelect>> ObtenerPorUsuario(int UsuarioId)
         {
-            CarritoPorUsuarioSelect objeto = new CarritoPorUsuarioSelect();
+            List<CarritoPorUsuarioSelect> listaObjetos = new List<CarritoPorUsuarioSelect>();
 
             using (var con = new SqlConnection(conexion))
             {
@@ -110,7 +110,7 @@ namespace MrPerezApiCore.Data
                 {
                     while (await reader.ReadAsync())
                     {
-                        objeto = new CarritoPorUsuarioSelect
+                        var objeto = new CarritoPorUsuarioSelect
                         {
                             CarritoId = Convert.ToInt32(reader["CarritoId"]),
                             ProductoId = reader["ProductoId"] != DBNull.Value ? Convert.ToInt32(reader["ProductoId"]) : (int?)null,
@@ -131,10 +131,12 @@ namespace MrPerezApiCore.Data
                             ProductoNombre = reader["ProductoNombre"] != DBNull.Value ? reader["ProductoNombre"].ToString() : null,
                             ProductoPrecio = reader["ProductoPrecio"] != DBNull.Value ? Convert.ToDecimal(reader["ProductoPrecio"]) : (decimal?)null
                         };
+
+                        listaObjetos.Add(objeto);
                     }
                 }
             }
-            return objeto;
+            return listaObjetos;
         }
 
 

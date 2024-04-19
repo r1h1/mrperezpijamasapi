@@ -44,8 +44,16 @@ namespace MrPerezApiCore.Controllers
         [Authorize]
         public async Task<IActionResult> ObtenerPorUsuario(int usuarioId)
         {
-            CarritoPorUsuarioSelect objeto = await _carritoData.ObtenerPorUsuario(usuarioId);
-            return StatusCode(StatusCodes.Status200OK, objeto);
+            List<CarritoPorUsuarioSelect> listaObjetos = await _carritoData.ObtenerPorUsuario(usuarioId);
+
+            int cantidadObjetos = listaObjetos.Count;
+
+            var respuesta = new
+            {
+                cantidadTotalEnCarrito = cantidadObjetos,
+                carritoData = listaObjetos
+            };
+            return StatusCode(StatusCodes.Status200OK, respuesta);
         }
 
 
