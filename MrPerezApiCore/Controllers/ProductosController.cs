@@ -23,15 +23,17 @@ namespace MrPerezApiCore.Controllers
         [HttpGet]
         public async Task<IActionResult> Lista()
         {
-            List<Productos> Lista = await _productosData.Lista();
-            return StatusCode(StatusCodes.Status200OK, Lista);
+            List<ProductosSelect> listaProductos = await _productosData.Lista();
+            int cantidadProductos = listaProductos.Count;
+            var respuesta = new { cantidadTotalProductos = cantidadProductos, productosData = listaProductos };
+            return StatusCode(StatusCodes.Status200OK, respuesta);
         }
 
         //GET WITH ID METHOD
         [HttpGet("{id}")]
         public async Task<IActionResult> Obtener(int id)
         {
-            Productos objeto = await _productosData.Obtener(id);
+            ProductosSelect objeto = await _productosData.Obtener(id);
             return StatusCode(StatusCodes.Status200OK, objeto);
         }
 

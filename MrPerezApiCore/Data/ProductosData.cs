@@ -16,9 +16,9 @@ namespace MrPerezApiCore.Data
             conexion = configuration.GetConnectionString("CadenaSQL")!;
         }
 
-        public async Task<List<Productos>> Lista()
+        public async Task<List<ProductosSelect>> Lista()
         {
-            List<Productos> lista = new List<Productos>();
+            List<ProductosSelect> lista = new List<ProductosSelect>();
 
             using (var con = new SqlConnection(conexion))
             {
@@ -37,7 +37,7 @@ namespace MrPerezApiCore.Data
                 {
                     while (await reader.ReadAsync())
                     {
-                        lista.Add(new Productos
+                        lista.Add(new ProductosSelect
                         {
                             ProductoId = Convert.ToInt32(reader["ProductoId"]),
                             Nombre = reader["Nombre"].ToString(),
@@ -45,8 +45,14 @@ namespace MrPerezApiCore.Data
                             Cantidad = reader["Cantidad"] != DBNull.Value ? Convert.ToInt32(reader["Cantidad"]) : (int?)null,
                             Precio = Convert.ToDecimal(reader["Precio"]),
                             MarcaId = reader["MarcaId"] != DBNull.Value ? Convert.ToInt32(reader["MarcaId"]) : (int?)null,
+                            MarcaNombre = reader["MarcaNombre"]?.ToString(),
+                            ProveedorMarca = reader["ProveedorMarca"]?.ToString(),
                             CategoriaId = reader["CategoriaId"] != DBNull.Value ? Convert.ToInt32(reader["CategoriaId"]) : (int?)null,
+                            DescripcionCategoria = reader["DescripcionCategoria"]?.ToString(),
+                            NombreCategoria = reader["NombreCategoria"]?.ToString(),
                             GeneroId = reader["GeneroId"] != DBNull.Value ? Convert.ToInt32(reader["GeneroId"]) : (int?)null,
+                            GeneroNombre = reader["GeneroNombre"]?.ToString(),
+                            GeneroResumen = reader["GeneroResumen"]?.ToString(),
                             Estado = Convert.ToInt32(reader["Estado"])
                         });
                     }
@@ -55,9 +61,10 @@ namespace MrPerezApiCore.Data
             return lista;
         }
 
-        public async Task<Productos> Obtener(int Id)
+
+        public async Task<ProductosSelect> Obtener(int Id)
         {
-            Productos objeto = new Productos();
+            ProductosSelect objeto = new ProductosSelect();
 
             using (var con = new SqlConnection(conexion))
             {
@@ -78,7 +85,7 @@ namespace MrPerezApiCore.Data
                 {
                     while (await reader.ReadAsync())
                     {
-                        objeto = new Productos
+                        objeto = new ProductosSelect
                         {
                             ProductoId = Convert.ToInt32(reader["ProductoId"]),
                             Nombre = reader["Nombre"].ToString(),
@@ -86,8 +93,14 @@ namespace MrPerezApiCore.Data
                             Cantidad = reader["Cantidad"] != DBNull.Value ? Convert.ToInt32(reader["Cantidad"]) : (int?)null,
                             Precio = Convert.ToDecimal(reader["Precio"]),
                             MarcaId = reader["MarcaId"] != DBNull.Value ? Convert.ToInt32(reader["MarcaId"]) : (int?)null,
+                            MarcaNombre = reader["MarcaNombre"]?.ToString(),
+                            ProveedorMarca = reader["ProveedorMarca"]?.ToString(),
                             CategoriaId = reader["CategoriaId"] != DBNull.Value ? Convert.ToInt32(reader["CategoriaId"]) : (int?)null,
+                            DescripcionCategoria = reader["DescripcionCategoria"]?.ToString(),
+                            NombreCategoria = reader["NombreCategoria"]?.ToString(),
                             GeneroId = reader["GeneroId"] != DBNull.Value ? Convert.ToInt32(reader["GeneroId"]) : (int?)null,
+                            GeneroNombre = reader["GeneroNombre"]?.ToString(),
+                            GeneroResumen = reader["GeneroResumen"]?.ToString(),
                             Estado = Convert.ToInt32(reader["Estado"])
                         };
                     }
