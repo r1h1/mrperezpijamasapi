@@ -24,5 +24,6 @@
         public string? ProductoDescripcion { get; set; }
         public string? ProductoNombre { get; set; }
         public decimal? ProductoPrecio { get; set; }
+        public string? ProductoImagen { get; set; }
     }
 }

@@ -25,7 +25,7 @@ namespace MrPerezApiCore.Data
                 await con.OpenAsync();
                 SqlCommand cmd = new SqlCommand("SELECT a.CarritoId,a.ProductoId,a.UsuarioId,a.Cantidad,a.TotalCantidad," +
                     "a.Estado,b.NombreCompleto,b.Nit,b.Ciudad,b.Direccion,b.Municipio,b.Pais,b.Referencia,b.Telefono," +
-                    "c.Cantidad,c.Descripcion,c.Nombre,c.Precio " +
+                    "c.Cantidad,c.Descripcion,c.Nombre,c.Precio,c.Imagen " +
                     "FROM Carrito a " +
                     "LEFT JOIN Usuario b ON b.UsuarioId = a.UsuarioId " +
                     "LEFT JOIN Productos c ON c.ProductoId = a.ProductoId " +
@@ -60,7 +60,7 @@ namespace MrPerezApiCore.Data
                 await con.OpenAsync();
                 SqlCommand cmd = new SqlCommand("SELECT a.CarritoId,a.ProductoId,a.UsuarioId,a.Cantidad,a.TotalCantidad," +
                     "a.Estado,b.NombreCompleto,b.Nit,b.Ciudad,b.Direccion,b.Municipio,b.Pais,b.Referencia,b.Telefono," +
-                    "c.Cantidad,c.Descripcion,c.Nombre,c.Precio, c.Imagen " +
+                    "c.Cantidad,c.Descripcion,c.Nombre,c.Precio,c.Imagen " +
                     "FROM Carrito a " +
                     "LEFT JOIN Usuario b ON b.UsuarioId = a.UsuarioId " +
                     "LEFT JOIN Productos c ON c.ProductoId = a.ProductoId " +
@@ -129,7 +129,8 @@ namespace MrPerezApiCore.Data
                             ProductoCantidad = reader["ProductoCantidad"] != DBNull.Value ? Convert.ToInt32(reader["ProductoCantidad"]) : (int?)null,
                             ProductoDescripcion = reader["ProductoDescripcion"] != DBNull.Value ? reader["ProductoDescripcion"].ToString() : null,
                             ProductoNombre = reader["ProductoNombre"] != DBNull.Value ? reader["ProductoNombre"].ToString() : null,
-                            ProductoPrecio = reader["ProductoPrecio"] != DBNull.Value ? Convert.ToDecimal(reader["ProductoPrecio"]) : (decimal?)null
+                            ProductoPrecio = reader["ProductoPrecio"] != DBNull.Value ? Convert.ToDecimal(reader["ProductoPrecio"]) : (decimal?)null,
+                            ProductoImagen = reader["ProductoImagen"] != DBNull.Value ? reader["ProductoImagen"].ToString() : null,
                         };
 
                         listaObjetos.Add(objeto);
