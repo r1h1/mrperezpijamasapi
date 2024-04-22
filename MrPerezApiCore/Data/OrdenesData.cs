@@ -156,30 +156,43 @@ namespace MrPerezApiCore.Data
 
             using (var con = new SqlConnection(conexion))
             {
-                SqlCommand cmd = new SqlCommand("INSERT INTO Ordenes (NumeroDeOrden, Descripcion, ProductoId, UsuarioId, Cantidad, TotalCantidad, FechaPedido, FechaPago, FechaRuta, FechaEntrega, Estado, Activo) " +
-                                                "VALUES (@NumeroDeOrden, @Descripcion, @ProductoId, @UsuarioId, @Cantidad, @TotalCantidad, @FechaPedido, @FechaPago, @FechaRuta, @FechaEntrega, @Estado, @Activo)", con);
-                cmd.Parameters.AddWithValue("@NumeroDeOrden", objeto.NumeroDeOrden);
-                cmd.Parameters.AddWithValue("@Descripcion", objeto.Descripcion);
-                cmd.Parameters.AddWithValue("@ProductoId", objeto.ProductoId ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@UsuarioId", objeto.UsuarioId ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@Cantidad", objeto.Cantidad ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@TotalCantidad", objeto.TotalCantidad ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@FechaPedido", objeto.FechaPedido ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@FechaPago", objeto.FechaPago ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@FechaRuta", objeto.FechaRuta ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@FechaEntrega", objeto.FechaEntrega ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@Estado", objeto.Estado);
-                cmd.Parameters.AddWithValue("@Activo", objeto.Activo);
+                await con.OpenAsync();
 
-                cmd.CommandType = CommandType.Text;
-                try
+                using (var transaction = con.BeginTransaction())
                 {
-                    await con.OpenAsync();
-                    respuesta = await cmd.ExecuteNonQueryAsync() > 0 ? true : false;
-                }
-                catch
-                {
-                    respuesta = false;
+                    try
+                    {
+                        // Update
+                        SqlCommand updateCmd = new SqlCommand("UPDATE Carrito SET Estado = 0 WHERE UsuarioId = @UsuarioId;", con, transaction);
+                        updateCmd.Parameters.AddWithValue("@UsuarioId", objeto.UsuarioId);
+                        await updateCmd.ExecuteNonQueryAsync();
+
+                        // Insert
+                        SqlCommand cmd = new SqlCommand("INSERT INTO Ordenes (NumeroDeOrden, Descripcion, ProductoId, UsuarioId, Cantidad, TotalCantidad, FechaPedido, FechaPago, FechaRuta, FechaEntrega, Estado, Activo) " +
+                                                        "VALUES (@NumeroDeOrden, @Descripcion, @ProductoId, @UsuarioId, @Cantidad, @TotalCantidad, GETDATE(), @FechaPago, @FechaRuta, @FechaEntrega, @Estado, @Activo);", con, transaction);
+                        cmd.Parameters.AddWithValue("@NumeroDeOrden", objeto.NumeroDeOrden);
+                        cmd.Parameters.AddWithValue("@Descripcion", objeto.Descripcion);
+                        cmd.Parameters.AddWithValue("@ProductoId", objeto.ProductoId ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@UsuarioId", objeto.UsuarioId ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@Cantidad", objeto.Cantidad ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@TotalCantidad", objeto.TotalCantidad ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@FechaPedido", objeto.FechaPedido ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@FechaPago", objeto.FechaPago ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@FechaRuta", objeto.FechaRuta ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@FechaEntrega", objeto.FechaEntrega ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@Estado", objeto.Estado);
+                        cmd.Parameters.AddWithValue("@Activo", objeto.Activo);
+
+                        await cmd.ExecuteNonQueryAsync();
+
+                        transaction.Commit();
+                        respuesta = true;
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                        respuesta = false;
+                    }
                 }
             }
             return respuesta;
