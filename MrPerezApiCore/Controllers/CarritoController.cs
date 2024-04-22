@@ -60,11 +60,12 @@ namespace MrPerezApiCore.Controllers
         // POST: api/Carrito
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Crear([FromBody] Carrito objeto)
+        public async Task<IActionResult> Crear([FromBody] CarritoInsert objeto)
         {
             bool respuesta = await _carritoData.Crear(objeto);
-            return StatusCode(StatusCodes.Status200OK, new { isSuccess = respuesta });
+            return StatusCode(StatusCodes.Status200OK, new { isSuccess = true });
         }
+
 
         // PUT: api/Carrito
         [HttpPut]

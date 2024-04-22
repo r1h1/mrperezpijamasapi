@@ -60,7 +60,7 @@ namespace MrPerezApiCore.Data
                 await con.OpenAsync();
                 SqlCommand cmd = new SqlCommand("SELECT a.CarritoId,a.ProductoId,a.UsuarioId,a.Cantidad,a.TotalCantidad," +
                     "a.Estado,b.NombreCompleto,b.Nit,b.Ciudad,b.Direccion,b.Municipio,b.Pais,b.Referencia,b.Telefono," +
-                    "c.Cantidad,c.Descripcion,c.Nombre,c.Precio " +
+                    "c.Cantidad,c.Descripcion,c.Nombre,c.Precio, c.Imagen " +
                     "FROM Carrito a " +
                     "LEFT JOIN Usuario b ON b.UsuarioId = a.UsuarioId " +
                     "LEFT JOIN Productos c ON c.ProductoId = a.ProductoId " +
@@ -98,7 +98,7 @@ namespace MrPerezApiCore.Data
                 SqlCommand cmd = new SqlCommand("SELECT a.CarritoId, a.ProductoId, a.UsuarioId, a.Cantidad, " +
                     "a.TotalCantidad, a.Estado, b.NombreCompleto, b.Nit, b.Ciudad, b.Direccion, b.Municipio, " +
                     "b.Pais, b.Referencia, b.Telefono, c.Cantidad AS ProductoCantidad, c.Descripcion AS ProductoDescripcion, " +
-                    "c.Nombre AS ProductoNombre, c.Precio AS ProductoPrecio " +
+                    "c.Nombre AS ProductoNombre, c.Precio AS ProductoPrecio, c.Imagen AS ProductoImagen " +
                     "FROM Carrito a " +
                     "LEFT JOIN Usuario b ON b.UsuarioId = a.UsuarioId " +
                     "LEFT JOIN Productos c ON c.ProductoId = a.ProductoId " +
@@ -140,24 +140,31 @@ namespace MrPerezApiCore.Data
         }
 
 
-        public async Task<bool> Crear(Carrito objeto)
+        public async Task<bool> Crear(CarritoInsert objeto)
         {
             bool respuesta = true;
 
             using (var con = new SqlConnection(conexion))
             {
-                SqlCommand cmd = new SqlCommand("INSERT INTO Carrito(ProductoId, UsuarioId, Cantidad, TotalCantidad, Estado) VALUES(@PProductoId, @PUsuarioId, @PCantidad, @PTotalCantidad, @PEstado)", con);
-                cmd.Parameters.AddWithValue("@PProductoId", objeto.ProductoId != null ? (object)objeto.ProductoId : DBNull.Value);
-                cmd.Parameters.AddWithValue("@PUsuarioId", objeto.UsuarioId != null ? (object)objeto.UsuarioId : DBNull.Value);
-                cmd.Parameters.AddWithValue("@PCantidad", objeto.Cantidad != null ? (object)objeto.Cantidad : DBNull.Value);
-                cmd.Parameters.AddWithValue("@PTotalCantidad", objeto.TotalCantidad != null ? (object)objeto.TotalCantidad : DBNull.Value);
-                cmd.Parameters.AddWithValue("@PEstado", objeto.Estado);
-
-                cmd.CommandType = CommandType.Text;
                 try
                 {
                     await con.OpenAsync();
-                    respuesta = await cmd.ExecuteNonQueryAsync() > 0 ? true : false;
+
+                    // Update the quantity in the Productos table
+                    SqlCommand updateCmd = new SqlCommand("UPDATE Productos SET Cantidad = @PNuevaCantidad WHERE ProductoId = @PProductoId", con);
+                    updateCmd.Parameters.AddWithValue("@PNuevaCantidad", objeto.NuevaCantidadProducto); // Update this line with the appropriate value for the new quantity
+                    updateCmd.Parameters.AddWithValue("@PProductoId", objeto.ProductoId);
+                    await updateCmd.ExecuteNonQueryAsync();
+
+                    // Insert the record into the Carrito table
+                    SqlCommand insertCmd = new SqlCommand("INSERT INTO Carrito(ProductoId, UsuarioId, Cantidad, TotalCantidad, Estado) VALUES(@PProductoId, @PUsuarioId, @PCantidad, @PTotalCantidad, @PEstado)", con);
+                    insertCmd.Parameters.AddWithValue("@PProductoId", objeto.ProductoId != null ? (object)objeto.ProductoId : DBNull.Value);
+                    insertCmd.Parameters.AddWithValue("@PUsuarioId", objeto.UsuarioId != null ? (object)objeto.UsuarioId : DBNull.Value);
+                    insertCmd.Parameters.AddWithValue("@PCantidad", objeto.Cantidad != null ? (object)objeto.Cantidad : DBNull.Value);
+                    insertCmd.Parameters.AddWithValue("@PTotalCantidad", objeto.TotalCantidad != null ? (object)objeto.TotalCantidad : DBNull.Value);
+                    insertCmd.Parameters.AddWithValue("@PEstado", objeto.Estado);
+
+                    respuesta = await insertCmd.ExecuteNonQueryAsync() > 0 ? true : false;
                 }
                 catch
                 {
@@ -166,6 +173,7 @@ namespace MrPerezApiCore.Data
             }
             return respuesta;
         }
+
 
         public async Task<bool> Editar(Carrito objeto)
         {
