@@ -78,8 +78,8 @@ namespace MrPerezApiCore.Data
                     "LEFT JOIN Categorias c ON c.CategoriaId = a.CategoriaId " +
                     "LEFT JOIN Genero d ON d.GeneroId = a.GeneroId " +
                     "WHERE a.Estado = 1 " +
-                    "AND a.ProductosId = @PProductosId", con);
-                cmd.Parameters.AddWithValue("@PProductosId", Id);
+                    "AND a.ProductoId = @PProductoId", con);
+                cmd.Parameters.AddWithValue("@PProductoId", Id);
                 cmd.CommandType = CommandType.Text;
 
                 using (var reader = await cmd.ExecuteReaderAsync())
