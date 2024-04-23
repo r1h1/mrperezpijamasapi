@@ -17,17 +17,20 @@ namespace MrPerezApiCore.Data
             conexion = configuration.GetConnectionString("CadenaSQL")!;
         }
 
-        public async Task<List<Ordenes>> Lista()
+        public async Task<List<OrdenesSelect>> Lista()
         {
-            List<Ordenes> lista = new List<Ordenes>();
+            List<OrdenesSelect> lista = new List<OrdenesSelect>();
 
             using (var con = new SqlConnection(conexion))
             {
                 await con.OpenAsync();
-                SqlCommand cmd = new SqlCommand("SELECT a.OrdenId, a.NumeroDeOrden, a.Descripcion, a.ProductoId, a.UsuarioId," +
-                    " a.Cantidad, a.TotalCantidad, a.FechaPedido, a.FechaPago, a.FechaRuta, a.FechaEntrega, a.Estado, " +
-                    "a.Activo, b.Cantidad, b.CategoriaId, b.Descripcion, b.GeneroId, b.MarcaId, b.Nombre, b.Precio, " +
-                    "c.Ciudad, c.Direccion, c.Email, c.Municipio, c.Nit, c.NombreCompleto, c.Pais, c.Referencia, c.Telefono " +
+                SqlCommand cmd = new SqlCommand("SELECT a.OrdenId, a.NumeroDeOrden, a.Descripcion AS OrdenDescripcion, " +
+                    "a.ProductoId, a.UsuarioId, a.Cantidad AS CantidadOrdenada, a.TotalCantidad, a.FechaPedido, " +
+                    "a.FechaPago, a.FechaRuta, a.FechaEntrega, a.Estado AS EstadoOrden, a.Activo AS OrdenActiva, " +
+                    "b.Cantidad AS CantidadProducto, b.CategoriaId, b.Descripcion AS ProductoDescripcion, " +
+                    "b.GeneroId, b.MarcaId, b.Nombre AS NombreProducto, b.Precio AS PrecioProducto, c.Ciudad, " +
+                    "c.Direccion AS DireccionUsuario, c.Email AS EmailUsuario, c.Municipio, c.Nit, " +
+                    "c.NombreCompleto AS NombreUsuario, c.Pais, c.Referencia, c.Telefono " +
                     "FROM Ordenes a " +
                     "LEFT JOIN Productos b ON b.ProductoId = a.ProductoId " +
                     "LEFT JOIN Usuario c ON c.UsuarioId = a.UsuarioId " +
@@ -38,21 +41,37 @@ namespace MrPerezApiCore.Data
                 {
                     while (await reader.ReadAsync())
                     {
-                        lista.Add(new Ordenes
+                        lista.Add(new OrdenesSelect
                         {
                             OrdenId = Convert.ToInt32(reader["OrdenId"]),
                             NumeroDeOrden = reader["NumeroDeOrden"].ToString(),
-                            Descripcion = reader["Descripcion"].ToString(),
+                            OrdenDescripcion = reader["OrdenDescripcion"].ToString(),
                             ProductoId = reader["ProductoId"] == DBNull.Value ? null : (int?)reader["ProductoId"],
                             UsuarioId = reader["UsuarioId"] == DBNull.Value ? null : (int?)reader["UsuarioId"],
-                            Cantidad = reader["Cantidad"] == DBNull.Value ? null : (int?)reader["Cantidad"],
+                            CantidadOrdenada = reader["CantidadOrdenada"] == DBNull.Value ? null : (int?)reader["CantidadOrdenada"],
                             TotalCantidad = reader["TotalCantidad"] == DBNull.Value ? null : (decimal?)reader["TotalCantidad"],
                             FechaPedido = reader["FechaPedido"] == DBNull.Value ? null : (DateTime?)reader["FechaPedido"],
                             FechaPago = reader["FechaPago"] == DBNull.Value ? null : (DateTime?)reader["FechaPago"],
                             FechaRuta = reader["FechaRuta"] == DBNull.Value ? null : (DateTime?)reader["FechaRuta"],
                             FechaEntrega = reader["FechaEntrega"] == DBNull.Value ? null : (DateTime?)reader["FechaEntrega"],
-                            Estado = Convert.ToInt32(reader["Estado"]),
-                            Activo = Convert.ToInt32(reader["Activo"])
+                            EstadoOrden = Convert.ToInt32(reader["EstadoOrden"]),
+                            OrdenActiva = Convert.ToInt32(reader["OrdenActiva"]),
+                            CantidadProducto = reader["CantidadProducto"] == DBNull.Value ? null : (int?)reader["CantidadProducto"],
+                            CategoriaId = reader["CategoriaId"] == DBNull.Value ? null : (int?)reader["CategoriaId"],
+                            ProductoDescripcion = reader["ProductoDescripcion"].ToString(),
+                            GeneroId = reader["GeneroId"] == DBNull.Value ? null : (int?)reader["GeneroId"],
+                            MarcaId = reader["MarcaId"] == DBNull.Value ? null : (int?)reader["MarcaId"],
+                            NombreProducto = reader["NombreProducto"].ToString(),
+                            PrecioProducto = reader["PrecioProducto"] == DBNull.Value ? null : (decimal?)reader["PrecioProducto"],
+                            Ciudad = reader["Ciudad"].ToString(),
+                            DireccionUsuario = reader["DireccionUsuario"].ToString(),
+                            EmailUsuario = reader["EmailUsuario"].ToString(),
+                            Municipio = reader["Municipio"].ToString(),
+                            Nit = reader["Nit"].ToString(),
+                            NombreUsuario = reader["NombreUsuario"].ToString(),
+                            Pais = reader["Pais"].ToString(),
+                            Referencia = reader["Referencia"].ToString(),
+                            Telefono = reader["Telefono"].ToString()
                         });
                     }
                 }
@@ -60,9 +79,9 @@ namespace MrPerezApiCore.Data
             return lista;
         }
 
-        public async Task<Ordenes> Obtener(int id)
+        public async Task<OrdenesSelect> Obtener(int id)
         {
-            Ordenes objeto = new Ordenes();
+            OrdenesSelect objeto = new OrdenesSelect();
 
             using (var con = new SqlConnection(conexion))
             {
@@ -83,21 +102,37 @@ namespace MrPerezApiCore.Data
                 {
                     while (await reader.ReadAsync())
                     {
-                        objeto = new Ordenes
+                        objeto = new OrdenesSelect
                         {
                             OrdenId = Convert.ToInt32(reader["OrdenId"]),
                             NumeroDeOrden = reader["NumeroDeOrden"].ToString(),
-                            Descripcion = reader["Descripcion"].ToString(),
+                            OrdenDescripcion = reader["OrdenDescripcion"].ToString(),
                             ProductoId = reader["ProductoId"] == DBNull.Value ? null : (int?)reader["ProductoId"],
                             UsuarioId = reader["UsuarioId"] == DBNull.Value ? null : (int?)reader["UsuarioId"],
-                            Cantidad = reader["Cantidad"] == DBNull.Value ? null : (int?)reader["Cantidad"],
+                            CantidadOrdenada = reader["CantidadOrdenada"] == DBNull.Value ? null : (int?)reader["CantidadOrdenada"],
                             TotalCantidad = reader["TotalCantidad"] == DBNull.Value ? null : (decimal?)reader["TotalCantidad"],
                             FechaPedido = reader["FechaPedido"] == DBNull.Value ? null : (DateTime?)reader["FechaPedido"],
                             FechaPago = reader["FechaPago"] == DBNull.Value ? null : (DateTime?)reader["FechaPago"],
                             FechaRuta = reader["FechaRuta"] == DBNull.Value ? null : (DateTime?)reader["FechaRuta"],
                             FechaEntrega = reader["FechaEntrega"] == DBNull.Value ? null : (DateTime?)reader["FechaEntrega"],
-                            Estado = Convert.ToInt32(reader["Estado"]),
-                            Activo = Convert.ToInt32(reader["Activo"])
+                            EstadoOrden = Convert.ToInt32(reader["EstadoOrden"]),
+                            OrdenActiva = Convert.ToInt32(reader["OrdenActiva"]),
+                            CantidadProducto = reader["CantidadProducto"] == DBNull.Value ? null : (int?)reader["CantidadProducto"],
+                            CategoriaId = reader["CategoriaId"] == DBNull.Value ? null : (int?)reader["CategoriaId"],
+                            ProductoDescripcion = reader["ProductoDescripcion"].ToString(),
+                            GeneroId = reader["GeneroId"] == DBNull.Value ? null : (int?)reader["GeneroId"],
+                            MarcaId = reader["MarcaId"] == DBNull.Value ? null : (int?)reader["MarcaId"],
+                            NombreProducto = reader["NombreProducto"].ToString(),
+                            PrecioProducto = reader["PrecioProducto"] == DBNull.Value ? null : (decimal?)reader["PrecioProducto"],
+                            Ciudad = reader["Ciudad"].ToString(),
+                            DireccionUsuario = reader["DireccionUsuario"].ToString(),
+                            EmailUsuario = reader["EmailUsuario"].ToString(),
+                            Municipio = reader["Municipio"].ToString(),
+                            Nit = reader["Nit"].ToString(),
+                            NombreUsuario = reader["NombreUsuario"].ToString(),
+                            Pais = reader["Pais"].ToString(),
+                            Referencia = reader["Referencia"].ToString(),
+                            Telefono = reader["Telefono"].ToString()
                         };
                     }
                 }
@@ -105,17 +140,20 @@ namespace MrPerezApiCore.Data
             return objeto;
         }
 
-        public async Task<Ordenes> ObtenerPorNumeroOrden(string numeroOrden)
+        public async Task<OrdenesSelect> ObtenerPorNumeroOrden(string numeroOrden)
         {
-            Ordenes objeto = new Ordenes();
+            OrdenesSelect objeto = new OrdenesSelect();
 
             using (var con = new SqlConnection(conexion))
             {
                 await con.OpenAsync();
-                SqlCommand cmd = new SqlCommand("SELECT a.OrdenId,a.NumeroDeOrden,a.Descripcion,a.ProductoId,a.UsuarioId," +
-                    "a.Cantidad,a.TotalCantidad,a.FechaPedido,a.FechaPago,a.FechaRuta,a.FechaEntrega,a.Estado,a.Activo," +
-                    "b.Cantidad,b.CategoriaId,b.Descripcion,b.GeneroId,b.MarcaId,b.Nombre,b.Precio,c.Ciudad,c.Direccion," +
-                    "c.Email,c.Municipio,c.Nit,c.NombreCompleto,c.Pais,c.Referencia,c.Telefono " +
+                SqlCommand cmd = new SqlCommand("SELECT a.OrdenId, a.NumeroDeOrden, a.Descripcion AS OrdenDescripcion, " +
+                    "a.ProductoId, a.UsuarioId, a.Cantidad AS CantidadOrdenada, a.TotalCantidad, a.FechaPedido, " +
+                    "a.FechaPago, a.FechaRuta, a.FechaEntrega, a.Estado AS EstadoOrden, a.Activo AS OrdenActiva, " +
+                    "b.Cantidad AS CantidadProducto, b.CategoriaId, b.Descripcion AS ProductoDescripcion, " +
+                    "b.GeneroId, b.MarcaId, b.Nombre AS NombreProducto, b.Precio AS PrecioProducto, c.Ciudad, " +
+                    "c.Direccion AS DireccionUsuario, c.Email AS EmailUsuario, c.Municipio, c.Nit, " +
+                    "c.NombreCompleto AS NombreUsuario, c.Pais, c.Referencia, c.Telefono " +
                     "FROM Ordenes a " +
                     "LEFT JOIN Productos b ON b.ProductoId = a.ProductoId " +
                     "LEFT JOIN Usuario c ON c.UsuarioId = a.UsuarioId " +
@@ -128,21 +166,37 @@ namespace MrPerezApiCore.Data
                 {
                     while (await reader.ReadAsync())
                     {
-                        objeto = new Ordenes
+                        objeto = new OrdenesSelect
                         {
                             OrdenId = Convert.ToInt32(reader["OrdenId"]),
                             NumeroDeOrden = reader["NumeroDeOrden"].ToString(),
-                            Descripcion = reader["Descripcion"].ToString(),
+                            OrdenDescripcion = reader["OrdenDescripcion"].ToString(),
                             ProductoId = reader["ProductoId"] == DBNull.Value ? null : (int?)reader["ProductoId"],
                             UsuarioId = reader["UsuarioId"] == DBNull.Value ? null : (int?)reader["UsuarioId"],
-                            Cantidad = reader["Cantidad"] == DBNull.Value ? null : (int?)reader["Cantidad"],
+                            CantidadOrdenada = reader["CantidadOrdenada"] == DBNull.Value ? null : (int?)reader["CantidadOrdenada"],
                             TotalCantidad = reader["TotalCantidad"] == DBNull.Value ? null : (decimal?)reader["TotalCantidad"],
                             FechaPedido = reader["FechaPedido"] == DBNull.Value ? null : (DateTime?)reader["FechaPedido"],
                             FechaPago = reader["FechaPago"] == DBNull.Value ? null : (DateTime?)reader["FechaPago"],
                             FechaRuta = reader["FechaRuta"] == DBNull.Value ? null : (DateTime?)reader["FechaRuta"],
                             FechaEntrega = reader["FechaEntrega"] == DBNull.Value ? null : (DateTime?)reader["FechaEntrega"],
-                            Estado = Convert.ToInt32(reader["Estado"]),
-                            Activo = Convert.ToInt32(reader["Activo"])
+                            EstadoOrden = Convert.ToInt32(reader["EstadoOrden"]),
+                            OrdenActiva = Convert.ToInt32(reader["OrdenActiva"]),
+                            CantidadProducto = reader["CantidadProducto"] == DBNull.Value ? null : (int?)reader["CantidadProducto"],
+                            CategoriaId = reader["CategoriaId"] == DBNull.Value ? null : (int?)reader["CategoriaId"],
+                            ProductoDescripcion = reader["ProductoDescripcion"].ToString(),
+                            GeneroId = reader["GeneroId"] == DBNull.Value ? null : (int?)reader["GeneroId"],
+                            MarcaId = reader["MarcaId"] == DBNull.Value ? null : (int?)reader["MarcaId"],
+                            NombreProducto = reader["NombreProducto"].ToString(),
+                            PrecioProducto = reader["PrecioProducto"] == DBNull.Value ? null : (decimal?)reader["PrecioProducto"],
+                            Ciudad = reader["Ciudad"].ToString(),
+                            DireccionUsuario = reader["DireccionUsuario"].ToString(),
+                            EmailUsuario = reader["EmailUsuario"].ToString(),
+                            Municipio = reader["Municipio"].ToString(),
+                            Nit = reader["Nit"].ToString(),
+                            NombreUsuario = reader["NombreUsuario"].ToString(),
+                            Pais = reader["Pais"].ToString(),
+                            Referencia = reader["Referencia"].ToString(),
+                            Telefono = reader["Telefono"].ToString()
                         };
                     }
                 }

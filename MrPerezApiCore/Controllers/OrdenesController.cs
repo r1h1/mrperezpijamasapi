@@ -26,7 +26,7 @@ namespace MrPerezApiCore.Controllers
         [Authorize]
         public async Task<IActionResult> Lista()
         {
-            List<Ordenes> lista = await _ordenesData.Lista();
+            List<OrdenesSelect> lista = await _ordenesData.Lista();
             return StatusCode(StatusCodes.Status200OK, lista);
         }
 
@@ -35,15 +35,16 @@ namespace MrPerezApiCore.Controllers
         [Authorize]
         public async Task<IActionResult> Obtener(int id)
         {
-            Ordenes objeto = await _ordenesData.Obtener(id);
+            OrdenesSelect objeto = await _ordenesData.Obtener(id);
             return StatusCode(StatusCodes.Status200OK, objeto);
         }
 
         // GET WITH ID METHOD
         [HttpGet("FilterByOrderNumber/{numeroOrden}")]
+        [Authorize]
         public async Task<IActionResult> ObtenerPorNumeroOrden(string numeroOrden)
         {
-            Ordenes objeto = await _ordenesData.ObtenerPorNumeroOrden(numeroOrden);
+            OrdenesSelect objeto = await _ordenesData.ObtenerPorNumeroOrden(numeroOrden);
             return StatusCode(StatusCodes.Status200OK, objeto);
         }
 
