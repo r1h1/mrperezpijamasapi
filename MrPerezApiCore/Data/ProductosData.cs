@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MrPerezApiCore.Data
 {
@@ -110,6 +111,64 @@ namespace MrPerezApiCore.Data
             }
             return objeto;
         }
+
+
+        public async Task<List<ProductosSelect>> ObtenerConFiltros(int MarcaId, int CategoriaId, int GeneroId)
+        {
+            List<ProductosSelect> lista = new List<ProductosSelect>();
+
+            using (var con = new SqlConnection(conexion))
+            {
+                await con.OpenAsync();
+                SqlCommand cmd = new SqlCommand("SELECT a.ProductoId, a.Nombre, a.Descripcion, a.Cantidad, a.Precio, a.Imagen, " +
+                                "a.MarcaId, a.CategoriaId, a.GeneroId, a.Estado, " +
+                                "b.Nombre AS MarcaNombre, b.Proveedor AS ProveedorMarca, " +
+                                "c.Descripcion AS DescripcionCategoria, c.Nombre AS NombreCategoria, " +
+                                "d.Nombre AS GeneroNombre, d.Resumen AS GeneroResumen " +
+                                "FROM Productos a " +
+                                "LEFT JOIN Marcas b ON b.MarcasId = a.MarcaId " +
+                                "LEFT JOIN Categorias c ON c.CategoriaId = a.CategoriaId " +
+                                "LEFT JOIN Genero d ON d.GeneroId = a.GeneroId " +
+                                "WHERE a.Estado = 1 " +
+                                "AND ( " +
+                                "(@PMarcaId <> 0 AND @PCategoriaId = 0 AND @PGeneroId = 0 AND a.MarcaId = @PMarcaId) OR " +
+                                "(@PMarcaId = 0 AND @PCategoriaId <> 0 AND @PGeneroId = 0 AND a.CategoriaId = @PCategoriaId) OR " +
+                                "(@PMarcaId = 0 AND @PCategoriaId = 0 AND @PGeneroId <> 0 AND a.GeneroId = @PGeneroId) " +
+                                ")", con);
+                cmd.Parameters.AddWithValue("@PMarcaId", MarcaId);
+                cmd.Parameters.AddWithValue("@PCategoriaId", CategoriaId);
+                cmd.Parameters.AddWithValue("@PGeneroId", GeneroId);
+                cmd.CommandType = CommandType.Text;
+
+                using (var reader = await cmd.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        lista.Add(new ProductosSelect
+                        {
+                            ProductoId = Convert.ToInt32(reader["ProductoId"]),
+                            Nombre = reader["Nombre"].ToString(),
+                            Descripcion = reader["Descripcion"].ToString(),
+                            Cantidad = reader["Cantidad"] != DBNull.Value ? Convert.ToInt32(reader["Cantidad"]) : (int?)null,
+                            Precio = Convert.ToDecimal(reader["Precio"]),
+                            Imagen = reader["Imagen"].ToString(),
+                            MarcaId = reader["MarcaId"] != DBNull.Value ? Convert.ToInt32(reader["MarcaId"]) : (int?)null,
+                            MarcaNombre = reader["MarcaNombre"]?.ToString(),
+                            ProveedorMarca = reader["ProveedorMarca"]?.ToString(),
+                            CategoriaId = reader["CategoriaId"] != DBNull.Value ? Convert.ToInt32(reader["CategoriaId"]) : (int?)null,
+                            DescripcionCategoria = reader["DescripcionCategoria"]?.ToString(),
+                            NombreCategoria = reader["NombreCategoria"]?.ToString(),
+                            GeneroId = reader["GeneroId"] != DBNull.Value ? Convert.ToInt32(reader["GeneroId"]) : (int?)null,
+                            GeneroNombre = reader["GeneroNombre"]?.ToString(),
+                            GeneroResumen = reader["GeneroResumen"]?.ToString(),
+                            Estado = Convert.ToInt32(reader["Estado"])
+                        });
+                    }
+                }
+            }
+            return lista;
+        }
+
 
         public async Task<bool> Crear(Productos objeto)
         {

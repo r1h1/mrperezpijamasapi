@@ -37,6 +37,16 @@ namespace MrPerezApiCore.Controllers
             return StatusCode(StatusCodes.Status200OK, objeto);
         }
 
+        // GET /api/Productos/FiltarProductos?MarcaId=0&CategoriaId=0&GeneroId=0
+        [HttpGet("FiltarProductos")]
+        public async Task<IActionResult> ObtenerConFiltros(int MarcaId, int CategoriaId, int GeneroId)
+        {
+            var lista = await _productosData.ObtenerConFiltros(MarcaId, CategoriaId, GeneroId);
+            int cantidadProductos = lista.Count;
+            var respuesta = new { cantidadTotalProductos = cantidadProductos, productosData = lista };
+            return StatusCode(StatusCodes.Status200OK, respuesta);
+        }
+
         //POST METHOD
         [HttpPost]
         [Authorize]
