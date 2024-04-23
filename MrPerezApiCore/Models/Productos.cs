@@ -10,6 +10,8 @@
         public int? MarcaId { get; set; }
         public int? CategoriaId { get; set; }
         public int? GeneroId { get; set; }
+
+        public string? Imagen { get; set; }
         public int Estado { get; set; }
     }
 }

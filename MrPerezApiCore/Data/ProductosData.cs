@@ -177,11 +177,14 @@ namespace MrPerezApiCore.Data
             using (var con = new SqlConnection(conexion))
             {
 
-                SqlCommand cmd = new SqlCommand("INSERT INTO Productos(Nombre, Descripcion, Cantidad, Precio, MarcaId, CategoriaId, GeneroId, Estado) VALUES(@PNombre, @PDescripcion, @PCantidad, @PPrecio, @PMarcaId, @PCategoriaId, @PGeneroId, @PEstado)", con);
+                SqlCommand cmd = new SqlCommand("INSERT INTO Productos(Nombre, Descripcion, Cantidad, Precio, " +
+                    "Imagen, MarcaId, CategoriaId, GeneroId, Estado) " +
+                    "VALUES(@PNombre, @PDescripcion, @PCantidad, @PPrecio, @PImagen, @PMarcaId, @PCategoriaId, @PGeneroId, @PEstado)", con);
                 cmd.Parameters.AddWithValue("@PNombre", objeto.Nombre);
                 cmd.Parameters.AddWithValue("@PDescripcion", objeto.Descripcion);
                 cmd.Parameters.AddWithValue("@PCantidad", objeto.Cantidad ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@PPrecio", objeto.Precio);
+                cmd.Parameters.AddWithValue("@PImagen", objeto.Imagen);
                 cmd.Parameters.AddWithValue("@PMarcaId", objeto.MarcaId ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@PCategoriaId", objeto.CategoriaId ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@PGeneroId", objeto.GeneroId ?? (object)DBNull.Value);
