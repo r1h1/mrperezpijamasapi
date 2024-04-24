@@ -24,7 +24,7 @@ namespace MrPerezApiCore.Controllers
         [Authorize]
         public async Task<IActionResult> Lista()
         {
-            List<Departamento> Lista = await _departamentoData.Lista();
+            List<DepartamentoSelect> Lista = await _departamentoData.Lista();
             return StatusCode(StatusCodes.Status200OK, Lista);
         }
 
@@ -33,7 +33,7 @@ namespace MrPerezApiCore.Controllers
         [Authorize]
         public async Task<IActionResult> Obtener(int id)
         {
-            Departamento objeto = await _departamentoData.Obtener(id);
+            DepartamentoSelect objeto = await _departamentoData.Obtener(id);
             return StatusCode(StatusCodes.Status200OK, objeto);
         }
 

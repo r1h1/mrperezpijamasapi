@@ -14,9 +14,9 @@ namespace MrPerezApiCore.Data
             conexion = configuration.GetConnectionString("CadenaSQL")!;
         }
 
-        public async Task<List<Departamento>> Lista()
+        public async Task<List<DepartamentoSelect>> Lista()
         {
-            List<Departamento> lista = new List<Departamento>();
+            List<DepartamentoSelect> lista = new List<DepartamentoSelect>();
 
             using (var con = new SqlConnection(conexion))
             {
@@ -31,11 +31,14 @@ namespace MrPerezApiCore.Data
                 {
                     while (await reader.ReadAsync())
                     {
-                        lista.Add(new Departamento
+                        lista.Add(new DepartamentoSelect
                         {
                             DepartamentoId = Convert.ToInt32(reader["DepartamentoId"]),
                             Nombre = reader["Nombre"].ToString(),
                             EmpresaId = Convert.ToInt32(reader["EmpresaId"]),
+                            Direccion = reader["Direccion"].ToString(),
+                            Nit = reader["Nit"].ToString(),
+                            Telefono = reader["Telefono"].ToString(),
                             Estado = Convert.ToInt32(reader["Estado"])
                         });
                     }
@@ -44,9 +47,9 @@ namespace MrPerezApiCore.Data
             return lista;
         }
 
-        public async Task<Departamento> Obtener(int Id)
+        public async Task<DepartamentoSelect> Obtener(int Id)
         {
-            Departamento objeto = new Departamento();
+            DepartamentoSelect objeto = new DepartamentoSelect();
 
             using (var con = new SqlConnection(conexion))
             {
@@ -63,11 +66,14 @@ namespace MrPerezApiCore.Data
                 {
                     while (await reader.ReadAsync())
                     {
-                        objeto = new Departamento
+                        objeto = new DepartamentoSelect
                         {
                             DepartamentoId = Convert.ToInt32(reader["DepartamentoId"]),
                             Nombre = reader["Nombre"].ToString(),
                             EmpresaId = Convert.ToInt32(reader["EmpresaId"]),
+                            Direccion = reader["Direccion"].ToString(),
+                            Nit = reader["Nit"].ToString(),
+                            Telefono = reader["Telefono"].ToString(),
                             Estado = Convert.ToInt32(reader["Estado"])
                         };
                     }
