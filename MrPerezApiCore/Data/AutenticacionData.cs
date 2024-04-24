@@ -23,7 +23,7 @@ namespace MrPerezApiCore.Data
             using (var con = new SqlConnection(conexion))
             {
                 await con.OpenAsync();
-                SqlCommand cmd = new SqlCommand("SELECT a.AutenticacionId,a.UsuarioId,a.EmpleadoId,a.Usuario,a.Clave,a.Token," +
+                SqlCommand cmd = new SqlCommand("SELECT a.AutenticacionId,a.UsuarioId,a.EmpleadoId,a.Usuario,a.Clave,a.Token, " +
                     "a.Estado,b.RolId AS RolUsuario,c.RolId AS RolEmpleado " +
                     "FROM Autenticacion a " +
                     "LEFT JOIN Usuario b ON b.UsuarioId = a.UsuarioId " +
@@ -39,7 +39,7 @@ namespace MrPerezApiCore.Data
                         {
                             AutenticacionId = Convert.ToInt32(reader["AutenticacionId"]),
                             UsuarioId = Convert.ToInt32(reader["UsuarioId"]),
-                            EmpleadoId = Convert.ToInt32(reader["EmpresaId"]),
+                            EmpleadoId = Convert.ToInt32(reader["EmpleadoId"]),
                             Usuario = reader["Usuario"].ToString(),
                             Clave = reader["Clave"].ToString(),
                             RolEmpleado = Convert.ToInt32(reader["RolUsuario"]),
@@ -59,7 +59,7 @@ namespace MrPerezApiCore.Data
             using (var con = new SqlConnection(conexion))
             {
                 await con.OpenAsync();
-                SqlCommand cmd = new SqlCommand("SELECT a.AutenticacionId,a.UsuarioId,a.EmpleadoId,a.Usuario,a.Clave,a.Token," +
+                SqlCommand cmd = new SqlCommand("SELECT a.AutenticacionId,a.UsuarioId,a.EmpleadoId,a.Usuario,a.Clave,a.Token, " +
                     "a.Estado,b.RolId AS RolUsuario,c.RolId AS RolEmpleado " +
                     "FROM Autenticacion a " +
                     "LEFT JOIN Usuario b ON b.UsuarioId = a.UsuarioId " +
@@ -77,7 +77,7 @@ namespace MrPerezApiCore.Data
                         {
                             AutenticacionId = Convert.ToInt32(reader["AutenticacionId"]),
                             UsuarioId = Convert.ToInt32(reader["UsuarioId"]),
-                            EmpleadoId = Convert.ToInt32(reader["EmpresaId"]),
+                            EmpleadoId = Convert.ToInt32(reader["EmpleadoId"]),
                             Usuario = reader["Usuario"].ToString(),
                             Clave = reader["Clave"].ToString(),
                             RolEmpleado = Convert.ToInt32(reader["RolUsuario"]),
@@ -106,7 +106,7 @@ namespace MrPerezApiCore.Data
 
             using (var con = new SqlConnection(conexion))
             {
-                SqlCommand cmd = new SqlCommand("SELECT a.AutenticacionId,a.UsuarioId,a.EmpleadoId,a.Usuario,a.Clave,a.Token," +
+                SqlCommand cmd = new SqlCommand("SELECT a.AutenticacionId,a.UsuarioId,a.EmpleadoId,a.Usuario,a.Clave,a.Token, " +
                                                 "a.Estado,b.RolId AS RolUsuario,c.RolId AS RolEmpleado " +
                                                 "FROM Autenticacion a " +
                                                 "LEFT JOIN Usuario b ON b.UsuarioId = a.UsuarioId " +
@@ -165,8 +165,7 @@ namespace MrPerezApiCore.Data
 
             using (var con = new SqlConnection(conexion))
             {
-                SqlCommand cmd = new SqlCommand("INSERT INTO Autenticacion(UsuarioId, EmpleadoId, Usuario, Clave, Token, Estado) " +
-                    "VALUES(@PUsuarioId, @PEmpleadoId, @PUsuario, @PClave, @PToken, @PEstado)", con);
+                SqlCommand cmd = new SqlCommand("INSERT INTO Autenticacion VALUES(@PUsuarioId,@PEmpleadoId,@PUsuario,@PClave,@PToken,@PEstado);", con);
                 cmd.Parameters.AddWithValue("@PUsuarioId", objeto.UsuarioId);
                 cmd.Parameters.AddWithValue("@PEmpleadoId", objeto.EmpleadoId);
                 cmd.Parameters.AddWithValue("@PUsuario", objeto.Usuario);
@@ -184,8 +183,10 @@ namespace MrPerezApiCore.Data
                     respuesta = false;
                 }
             }
+
             return respuesta;
         }
+
 
         public async Task<bool> Editar(AutenticacionInsertadoEditado objeto)
         {
