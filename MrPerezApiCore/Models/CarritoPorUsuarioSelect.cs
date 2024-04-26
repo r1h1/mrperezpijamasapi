@@ -25,5 +25,8 @@
         public string? ProductoNombre { get; set; }
         public decimal? ProductoPrecio { get; set; }
         public string? ProductoImagen { get; set; }
+        public int? marcaId { get; set; }
+        public int? categoriaId { get; set; }
+        public int? generoId { get; set; }
     }
 }
